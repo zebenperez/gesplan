@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n gestion_tags %}
 
 
 <div class="row main-th py-3 m-0">
@@ -30,27 +30,31 @@
             {% if item.on_saturday %}<i class="fas fa-check"></i>{% else %}<i class="fas fa-times"></i>{% endif %}</div>
         {%endcomment%}
         <div class="col-2 text-right">
-
-            <div class="dropdown">
-                <a class="pt-3" type="button" id="dropdownProfile" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-ellipsis-h"></i></a>
-                <div class="dropdown-menu user-dropdown" aria-labelledby="dropdownProfile" data-popper-placement="bottom-start"
-                    style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(721px, 380px);" >
-                    <ul class="m-0">
-                        <li> <a class="btn btn-xs" href="{%url "trucks-manteinances" item.id%}" title="{% trans 'Mantenimiento' %}"> 
-                            <i class="fas fa-cog"></i> {% trans 'Mantenimiento' %}</a></li>
-                        <div class="dropdown-divider"></div>
-                        <li> <a class="btn btn-xs ark" data-url="{% url "trucks-form" %}" data-target-modal="common-modal" data-obj_id="{{item.id}}" 
-                            title="{% trans 'Editar' %}"><i class="fas fa-edit"></i> {% trans 'Editar' %}</a></li>
-                        <div class="dropdown-divider"></div>
-                        <li> 
-                            <a class="btn btn-xs ark" data-url="{% url "trucks-remove" %}" data-target="truck-list" data-obj_id="{{item.id}}" 
-                            title="{% trans 'Borrar' %}" data-confirm="{% trans "Are you sure to remove this element?" %}">
-                            <i class="fas fa-trash"></i> {% trans 'Borrar' %}</a></li>
-                        <div class="dropdown-divider"></div>
-                    </ul>
+            {% if user|in_group:"admins" %}
+                <div class="dropdown">
+                    <a class="pt-3" type="button" id="dropdownProfile" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-h"></i></a>
+                    <div class="dropdown-menu user-dropdown" aria-labelledby="dropdownProfile" data-popper-placement="bottom-start"
+                        style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(721px, 380px);" >
+                        <ul class="m-0">
+                            <li> <a class="btn btn-xs" href="{%url "trucks-manteinances" item.id%}" title="{%trans 'Mantenimiento'%}"> 
+                                <i class="fas fa-cog"></i> {% trans 'Mantenimiento' %}</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li> <a class="btn btn-xs ark" data-url="{% url "trucks-form" %}" data-target-modal="common-modal" 
+                                data-obj_id="{{item.id}}" title="{%trans 'Editar'%}"><i class="fas fa-edit"></i> {%trans 'Editar'%}</a>
+                            </li>
+                            <div class="dropdown-divider"></div>
+                            <li> 
+                                <a class="btn btn-xs ark" data-url="{% url "trucks-remove" %}" data-target="truck-list" 
+                                    data-obj_id="{{item.id}}" title="{% trans 'Borrar' %}" 
+                                    data-confirm="{% trans "Are you sure to remove this element?" %}">
+                                    <i class="fas fa-trash"></i> {% trans 'Borrar' %}</a>
+                            </li>
+                            <div class="dropdown-divider"></div>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 {% endfor %}

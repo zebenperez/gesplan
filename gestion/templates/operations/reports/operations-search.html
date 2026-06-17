@@ -4,15 +4,6 @@
 <form class="form m-0" method="GET" action="{% url "operation-report-search" %}" id="form-search">
     {%csrf_token%}
     <div class="row toolbar-search p-2 m-0 mt-4">
-        {%comment%}
-        <div class="row">
-            <div class="col-2 py-2 text-center d-none d-lg-block"> <span>{% trans "Fecha de inicio entre:" %}</span> </div>
-            <div class="col-5"> <input type="date" class="form-control form-control-dark w-100" 
-                name="sr_operation_idate_ini" id="sr_operation_idate_ini" value="{{request.session.sr_operation_idate_ini}}"/> </div>
-            <div class="col-5"> <input type="date" class="form-control form-control-dark w-100" 
-                name="sr_operation_idate_end" id="sr_operation_idate_end" value="{{request.session.sr_operation_idate_end}}"/> </div>
-        </div>
-        {%endcomment%}
         <div class="row">
             <div class="col-2 py-2 text-center d-none d-lg-block"> <span>{% trans "Fecha entre:" %}</span> </div>
             <div class="col-5"> <input type="date" class="form-control form-control-dark w-100" 
@@ -70,8 +61,25 @@
                     {% endfor %}
                 </select>
             </div>
-
         </div>
+
+        <div class="row">
+            <div class="col-12 text-center">
+                <button class="btn btn-default saveform w-25" style="border: 1px solid #a58a11;"  data-form="form-search" 
+                    data-target="operations-list"> <i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </div>
+</form>
+        {%comment%}
+        <div class="row">
+            <div class="col-2 py-2 text-center d-none d-lg-block"> <span>{% trans "Fecha de inicio entre:" %}</span> </div>
+            <div class="col-5"> <input type="date" class="form-control form-control-dark w-100" 
+                name="sr_operation_idate_ini" id="sr_operation_idate_ini" value="{{request.session.sr_operation_idate_ini}}"/> </div>
+            <div class="col-5"> <input type="date" class="form-control form-control-dark w-100" 
+                name="sr_operation_idate_end" id="sr_operation_idate_end" value="{{request.session.sr_operation_idate_end}}"/> </div>
+        </div>
+        {%endcomment%}
 
         {% comment %}
         <div class="row">
@@ -130,12 +138,4 @@
             </div>
      
         {% endcomment %}
-        <div class="row">
-            <div class="col-12 text-center">
-                <button class="btn btn-default saveform w-25" style="border: 1px solid #a58a11;"  data-form="form-search" data-target="operations-list">
-                    <i class="fas fa-search"></i></button>
-            </div>
-        </div>
-    </div>
-</form>
 

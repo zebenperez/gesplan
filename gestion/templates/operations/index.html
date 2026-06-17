@@ -3,19 +3,25 @@
 
 {% block central_content %}
     <ul class="nav nav-tabs mx-2 pl-2 pr-2 pt-2">
-        <li class="nav-item"> <a class="nav-link {%if not current_tab or current_tab == ""%}active{%endif%}" 
+        <li class="nav-item"><a class="nav-link {%if not current_tab or current_tab == "routes" or current_tap == ""%}active{%endif%}" 
+            data-bs-toggle="tab" href="#routes"> {%trans "Rutas"%}</a> </li>
+        <li class="nav-item"><a class="nav-link {%if current_tab == "facilities"%}active{%endif%}" 
             data-bs-toggle="tab" href="#facilities"> {% trans "Estado de los contenedores" %}</a> </li>
-        <li class="nav-item"> <a class="nav-link {%if current_tab == "routes"%}active{%endif%}" data-bs-toggle="tab" href="#routes">
-            {%trans "Rutas"%}</a> </li>
+        <li class="nav-item"><a class="nav-link {%if current_tab == "incidents"%}active{%endif%}" 
+            data-bs-toggle="tab" href="#incidents"> {% trans "Incidencias" %}</a> </li>
     </ul>
     <div class="tab-content internal mx-2 p-0">
+        {# -------------------------- ROUTES ------------------------#}
+        <div class="tab-pane container {%if not current_tab or current_tab == "routes" or current_tap == ""%}active{%endif%} m-0" 
+            id="routes"><div id="div-routes"> {% include "operations/routes/routes.html" %}</div></div>
+
         {# -------------------------- FACILITIES ------------------------#}
-        <div class="tab-pane container {%if not current_tab or current_tab == ""%}active{%endif%} m-0" id="facilities">
+        <div class="tab-pane container {%if current_tab == "facilities"%}active{%endif%} m-0" id="facilities">
             <div id="div-facilities"> {% include "operations/facilities.html" %}</div></div>
 
-        {# -------------------------- ROUTES ------------------------#}
-        <div class="tab-pane container {%if current_tab == "routes"%}active{%endif%} m-0" id="routes"><div id="div-routes">
-            {% include "operations/routes/routes.html" %}</div></div>
+        {# -------------------------- INCIDENTS ------------------------#}
+        <div class="tab-pane container {%if current_tab == "incidents"%}active{%endif%} m-0" id="incidents">
+            <div id="div-incidents"> {% include "operations/incidents.html" %}</div></div>
     </div>
     {% include "common-modal.html" %}
 {% endblock central_content %}

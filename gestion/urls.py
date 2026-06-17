@@ -86,6 +86,7 @@ urlpatterns = [
 
     #---------------------- OPERATION -----------------------
     path('operation/index', operation_views.index, name='operation-index'),
+    path('operation/incidents/list', operation_views.incidents_list, name='operation-incidents-list'),
     path('operation/routes/view', operation_views.routes_view, name='operation-routes-view'),
     path('operation/routes/list', operation_views.routes_list, name='operation-routes-list'),
     path('operation/routes-ext/list', operation_views.routes_ext_list, name='operation-routes-ext-list'),
@@ -95,6 +96,7 @@ urlpatterns = [
     path('operation/facility-waste', operation_views.facility_waste, name='operation-facility-waste'),
     path('operation/report', operation_views.report, name='operation-report'),
     path('operation/report-search', operation_views.report_search, name='operation-report-search'),
+    path('operation/report-dir/<int:route_id>', operation_views.report_dir, name='operation-report-dir'),
     path('operation/routes/source-save', operation_views.routes_source_save, name='operation-routes-source-save'),
     path('operation/routes/img-upload', operation_views.routes_img_upload, name='operation-routes-img-upload'),
     path('operation/routes/img-remove', operation_views.routes_img_remove, name='operation-routes-img-remove'),

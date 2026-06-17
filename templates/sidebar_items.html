@@ -32,6 +32,21 @@
     <div class="nav-item w-100 {%current 'facility'%}">
         <a class="nav-link" aria-current="page" href="{%url 'operation-facility-external'%}"> 
         <i class='fas fa-warehouse'></i><span class="px-3">{%trans 'Instalaciones'%}</span></a></div>
+{% elif user|in_group:"managers" %}
+    <div class="nav-item w-100 {%current 'home'%}"><a class="nav-link" aria-current="page" href="{% url 'index' %}">
+	    <i class='fas fa-home'></i><span class="px-3">{%trans 'Inicio'%}</span></a></div>
+    <div class="nav-item w-100 {%current 'companies'%}"><a class="nav-link" aria-current="page" href="{% url 'companies' %}">
+        <i class='fas fa-building'></i><span class="px-3">{%trans 'Compañias'%}</span></a></div>
+    <div class="nav-item w-100 {%current 'facilities'%}"><a class="nav-link" aria-current="page" href="{% url 'facilities-index' %}">
+        <i class='fas fa-warehouse'></i><span class="px-3">{%trans 'Instalaciones'%}</span></a></div>
+    <div class="nav-item w-100 {%current 'trucks'%}"><a class="nav-link" aria-current="page" href="{% url 'trucks' %}">
+        <i class='fas fa-truck'></i><span class="px-3">{%trans 'Vehículos'%}</span></a></div>
+    <div class="nav-item w-100 {%current 'employees'%}"><a class="nav-link" aria-current="page" href="{% url 'employees' %}">
+        <i class='fas fa-user'></i><span class="px-3">{%trans 'Empleados'%}</span></a></div>
+    <div class="nav-item w-100 {%current 'shifts'%}"><a class="nav-link" aria-current="page" href="{% url 'shifts-index' %}">
+        <i class='fas fa-calendar'></i><span class="px-3">{%trans 'Turnos'%}</span></a></div>
+    <div class="nav-item w-100 {%current 'citizens'%}"><a class="nav-link" aria-current="page" href="{% url 'report-index' %}">
+        <i class='fas fa-calendar'></i><span class="px-3">{%trans 'Informes'%}</span></a></div>
 {% else %}
     <div class="nav-item"> <a class="nav-link {% current '' %}" href="{% url 'auth_login'  %}"> 
         <i class="fas fa-sign-in-alt"></i> {% trans "Log in" %}</a> </div>

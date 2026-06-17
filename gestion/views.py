@@ -34,15 +34,15 @@ def get_companies(request):
             full_query |= Q(**{myfilter: search_value})
     return Company.objects.filter(full_query)
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def companies(request):
     return render(request, "companies/companies.html", {"items": get_companies(request)})
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def companies_list(request):
     return render(request, "companies/companies-list.html", {"items": get_companies(request)})
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def companies_search(request):
     search_value = get_param(request.GET, "s-name")
     set_session(request, "s-comp-name", search_value)
@@ -66,7 +66,7 @@ def companies_remove(request):
 '''
     FACILITIES
 '''
-@group_required("admins",)
+@group_required("admins", "managers")
 def facilities_index(request):
     fac_list = Facility.objects.filter(description__contains="Punto")
     mpl_list = Facility.objects.filter(code__startswith="MPL-")
@@ -83,15 +83,15 @@ def get_facilities(request):
     val = get_session(request, "s_facility_name")
     return Facility.objects.filter(description__icontains=val).filter(Q(description__contains="Punto") | Q(code__startswith="MPL-"))
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def facilities(request):
     return render(request, "facilities/facilities.html", {"items": get_facilities(request)})
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def facilities_list(request):
     return render(request, "facilities/facilities-list.html", {"items": get_facilities(request)})
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def facilities_search(request):
     set_session(request, "s_facility_name", get_param(request.GET, "s_facility_name"))
     return render(request, "facilities/facilities-list.html", {"items": get_facilities(request)})
@@ -219,15 +219,15 @@ def get_trucks(request):
             full_query |= Q(**{myfilter: search_value})
     return Truck.objects.filter(full_query)
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def trucks(request):
     return render(request, "trucks/trucks.html", {"items": get_trucks(request)})
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def trucks_list(request):
     return render(request, "trucks/trucks-list.html", {"items": get_trucks(request)})
 
-@group_required("admins",)
+@group_required("admins", "managers")
 def trucks_search(request):
     search_value = get_param(request.GET, "s-name")
     set_session(request, "s-truck-name", search_value)

@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from datetime import datetime
+
+from django.views.decorators.csrf import csrf_exempt
 
 from gesplan.decorators import group_required_pwa
 from gesplan.commons import get_or_none, get_param, show_exc, get_float
@@ -49,6 +51,7 @@ def operator_wastes_save(request):
         manager = obj.external_manager
         if val >= obj.warning_filling_degree and not obj.toRoute and manager != None and re == None:
             RouteExt.objects.create(waste=obj, facility=obj.facility, external_manager=manager)
+        obj.show_user = True if get_param(request.POST, "show_user") != "" else False
         obj.filling_degree = val
         obj.save()
         return redirect("pwa-operator")
@@ -62,6 +65,9 @@ def operator_wastes_save(request):
 '''
 @group_required_pwa("operators")
 def operator_citizens(request):
+    # Is summer time in effect?
+
+
     now = datetime.now()
     is_monday = datetime.today().weekday() == 0
     is_saturday = datetime.today().weekday() == 5
@@ -78,6 +84,19 @@ def operator_citizens(request):
         elif is_saturday:
             start_shift=start_shift.replace(hour=14, minute=30)
         end_shift = end_shift.replace(hour=23, minute=59)
+
+    # Cambio horario
+    from pytz import timezone
+    from datetime import timedelta
+    tz = timezone('Atlantic/Canary')
+    if tz.dst(datetime.now()) != timedelta(0):
+        offset = 1
+    else:
+        offset = 0
+
+    end_shift -= timedelta(hours=offset)
+    start_shift -= timedelta(hours=offset)
+    # Fin cambio horario
 
     fac = request.user.employee.facility
     citizen_list = Citizen.objects.filter(facility=fac, date__gte=start_shift, date__lte=end_shift).order_by('-pk')
@@ -167,6 +186,7 @@ def facility_save(request):
             return (render(request, "error_exception.html", {'exc': 'Instalación no encontrada!'}))
     except Exception as e:
         return (render(request, "error_exception.html", {'exc':show_exc(e)}))
+    
 
 
 

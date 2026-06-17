@@ -239,6 +239,7 @@ class Facility(models.Model):
 
 class WasteInFacility(models.Model):
     ext_code = models.IntegerField(verbose_name=_('External code'), null=True, blank=True, default=0)
+    show_user = models.BooleanField(verbose_name=_('Mostrar a usuarios'), default=True)
     toRoute = models.BooleanField(verbose_name=_('En ruta'), default=True)
     code = models.CharField(max_length=255, verbose_name='Código', default = "Cont.000")
     filling_degree = models.DecimalField(verbose_name = _('Porcentaje de llenado'), max_digits=5, decimal_places=2, default=0.)

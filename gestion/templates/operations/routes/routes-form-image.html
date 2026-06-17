@@ -2,7 +2,7 @@
 
 
 {% if obj.image %}
-    <img src="{{obj.image.url}}" alt="image {{obj.id}}" /> <br/>
+    <img src="{{obj.image.url}}" alt="image {{obj.id}}" style="max-width:200px"/> <br/>
     <a class="btn btn-xs ark" data-url="{% url "operation-routes-img-remove" %}" data-target="div-images" 
         data-obj_id="{{obj.id}}" title="{%trans 'Borrar'%}" data-confirm="{%trans "Are you sure to remove this element?"%}">
     <i class="fas fa-trash"></i></a> 

@@ -1,0 +1,29 @@
+{% load i18n %}
+
+<div class="row main-th py-3 m-0">
+    <div class="col-2"> {% trans 'Usuario' %} </div>
+    <div class="col-1"> {% trans 'Tipo' %} </div>
+    <div class="col-1"> {% trans 'Código' %} </div>
+    <div class="col-1"> {% trans 'Asunto' %} </div>
+    <div class="col-3"> {% trans 'Descripción' %} </div>
+    <div class="col-1"> {% trans 'Creada en' %} </div>
+    <div class="col-1"> {% trans 'Cerrada en' %} </div>
+    <div class="col-1"> {% trans 'Cerrada' %} </div>
+    <div class="col-1"></div>
+</div>
+
+{% for item in incidents %}
+    <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
+        <div class="col-2">{{ item.owner.username }}</div>
+        <div class="col-1">{{ item.type.name }}</div>
+        <div class="col-1">{{ item.code }}</div>
+        <div class="col-1">{{ item.subject }}</div>
+        <div class="col-3">{{ item.description }}</div>
+        <div class="col-1">{{ item.creation_date|date:"d-m-Y H:i" }}</div>
+        <div class="col-1">{{ item.closed_date|date:"d-m-Y H:i" }}</div>
+        <div class="col-1">{%if item.closed%}<i class="fas fa-check"></i>{%else%}<i class="fas fa-times"></i>{%endif%}</div>
+        <div class="col-1 text-end">
+        </div>
+    </div>
+{% endfor %}
+

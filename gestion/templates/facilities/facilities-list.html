@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n gestion_tags %}
 
 
 <div class="row main-th py-3 m-0">
@@ -25,23 +25,29 @@
                     style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(721px, 380px);" >
                     <ul class="m-0">
                         <li> 
-                            <a class="btn btn-xs" href="{%url "facilities-manteinances" item.id%}" title="{% trans 'Mantenimiento' %}"> 
-                            <i class="fas fa-cog"></i> {% trans 'Mantenimiento' %}</a></li>
+                            <a class="btn btn-xs" href="{%url "facilities-manteinances" item.id%}" title="{%trans 'Mantenimiento'%}"> 
+                                <i class="fas fa-cog"></i> {% trans 'Mantenimiento' %}</a></li>
                         <div class="dropdown-divider"></div>
                         <li> 
-                            <a class="btn btn-xs ark" data-url="{%url "facilities-items"%}" data-target-modal="common-modal" data-obj_id="{{item.id}}" 
-                            title="{% trans 'Materiales' %}"> <i class="fas fa-list"></i> {% trans 'Materiales' %}</a></li>
+                            <a class="btn btn-xs ark" data-url="{%url "facilities-items"%}" data-target-modal="common-modal" 
+                                data-obj_id="{{item.id}}" title="{% trans 'Materiales' %}"> <i class="fas fa-list"></i> 
+                                {% trans 'Materiales' %}</a></li>
                         <div class="dropdown-divider"></div>
-                        <li> 
-                            <a class="btn btn-xs ark" data-url="{%url "facilities-form"%}" data-target-modal="common-modal" data-obj_id="{{item.id}}" 
-                            title="{% trans 'Editar' %}"><i class="fas fa-edit"></i> {% trans 'Editar' %}</a></li>
-                        <div class="dropdown-divider"></div>
-                        <li> 
-                            <a class="btn btn-xs ark" data-url="{% url "facilities-remove" %}" data-target="fac-list" data-obj_id="{{item.id}}" 
-                            title="{% trans 'Borrar' %}" data-confirm="{% trans "Are you sure to remove this element?" %}">
-                            <i class="fas fa-trash"></i> {% trans 'Borrar' %}</a></li>
-                        <div class="dropdown-divider"></div>
-
+                        {% if user|in_group:"admins" %}
+                            <li> 
+                                <a class="btn btn-xs ark" data-url="{%url "facilities-form"%}" data-target-modal="common-modal" 
+                                    data-obj_id="{{item.id}}" title="{%trans 'Editar'%}"><i class="fas fa-edit"></i> {%trans 'Editar'%}
+                                </a>
+                            </li>
+                            <div class="dropdown-divider"></div>
+                            <li> 
+                                <a class="btn btn-xs ark" data-url="{% url "facilities-remove" %}" data-target="fac-list" 
+                                    data-obj_id="{{item.id}}" title="{% trans 'Borrar' %}" 
+                                    data-confirm="{% trans "Are you sure to remove this element?" %}">
+                                    <i class="fas fa-trash"></i> {% trans 'Borrar' %}</a>
+                            </li>
+                            <div class="dropdown-divider"></div>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

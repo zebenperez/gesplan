@@ -22,9 +22,22 @@
             <label for="image" class="btn">{% trans "Imagen del peso" %}</label>
             <input type="file" class="form-control" id="image" name="file"/>
         </div>
+        <div class="col-12 mt-3">
+            <label for="image" class="btn">{% trans "Sacar foto" %}</label>
+            <input type="file" class="form-control" id="image2" name="file2" accept="image/*" capture="environment"/>
+        </div>
         <br/>
-        <div class="col-12"><input type="submit" class="btn btn-primary form-control" value="DESCARGAR"/></div>
+        <div class="col-12">
+            <input type="submit" id="btn-download" class="btn btn-primary form-control" value="DESCARGAR" disabled/></div>
     </form>
+    <script>
+        function enableBtn(){
+            if ($("#target").val()) { $("#btn-download").prop("disabled", ""); }
+            else { $("#btn-download").prop("disabled", "disabled");} 
+        }
+        $("#target").change(function(){enableBtn();});
+        enableBtn();
+    </script>
 
     {%comment%}
     <div class="row m-0">

@@ -1,0 +1,33 @@
+{% load i18n %}
+
+{% with items=actions %}
+    <div class="content mt-1"> <div id="route-ext-list" class="ml-list">
+        <div class="row main-th py-3 m-0">
+            <div class="col-2"> {% trans 'Fecha' %} </div>
+            <div class="col-2"> {% trans 'Vehículo' %} </div>
+            <div class="col-2"> {% trans 'Conductor' %} </div>
+            <div class="col-2"> {% trans 'Instalación' %} </div>
+            <div class="col-2"> {% trans 'Acción' %} </div>
+            <div class="col-2"></div>
+        </div>
+
+        {% for item in items %}
+            <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
+                <div class="col-2">{{ item.date|date:"d-m-Y H:i" }}</div>
+                <div class="col-2">{{ item.truck.name }}</div>
+                <div class="col-2">{{ item.driver.name }}</div>
+                <div class="col-2">{{ item.facility.description }}</div>
+                <div class="col-2">{{ item.fa_type.name }}</div>
+                <div class="col-2 text-right">
+                    {%comment%}
+                    <a class="btn btn-xs ark" data-url="{% url "operation-routes-ext-form" %}" data-target-modal="common-modal" 
+                        data-obj_id="{{item.id}}" title="{% trans 'Editar' %}"><i class="fas fa-edit"></i></a> 
+                    <a class="btn btn-xs ark" data-url="{% url "routes-remove" %}" data-target="route-list" data-obj_id="{{item.id}}" 
+                        title="{% trans 'Borrar' %}" data-confirm="{% trans "Are you sure to remove this element?" %}">
+                        <i class="fas fa-trash"></i></a> 
+                    {%endcomment%}
+                </div>
+            </div>
+        {% endfor %}
+    </div> </div>
+{% endwith %}

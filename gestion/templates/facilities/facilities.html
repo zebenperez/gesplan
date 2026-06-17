@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n gestion_tags %}
 
 {%comment%}
 <div class="row toolbar-search p-2 m-0">
@@ -14,8 +14,10 @@
     <div class="toolbar-content p-3">
         <h2 class="pathway b-right">
             {%trans 'Instalaciones'%} <span id="items-counter" class="badge badge-secondary">{{items|length}}</span></h2>
-        <button type="button" class="btn btn-sm ark new" data-url="{%url "facilities-form"%}" data-target-modal="common-modal"> 
-            <i class="fas fa-plus"></i> {% trans 'Crear Instalación' %}</button> 
+        {% if user|in_group:"admins" %}
+            <button type="button" class="btn btn-sm ark new" data-url="{%url "facilities-form"%}" data-target-modal="common-modal"> 
+                <i class="fas fa-plus"></i> {% trans 'Crear Instalación' %}</button> 
+        {% endif %}
     </div>
     <div id="fac-list" class="ml-list">{% include "facilities/facilities-list.html" %}</div>
 </div>

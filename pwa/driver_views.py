@@ -90,6 +90,10 @@ def driver_routes_finish(request):
     if "file" in request.FILES:
         image = request.FILES["file"] 
         route.image = image
+    if "file2" in request.FILES:
+        image = request.FILES["file2"] 
+        route.image = image
+    route.target = target
     route.target = target
     route.weight = weight
     route.end_date = datetime.now()

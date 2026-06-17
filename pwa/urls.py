@@ -77,6 +77,7 @@ urlpatterns = [
     path('actions/actions/', actions_views.actions, name="pwa-actions"),
     path('actions/save-action/', actions_views.save_action, name="pwa-actions-save"),
 
+
     #path('manager/', views.manager_home, name="pwa-manager"),
 
 #    # OPERATOR

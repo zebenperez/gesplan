@@ -404,11 +404,13 @@ def citizens_status_containers(request):
                 facility = None
 
             if facility is not None:
-                items_list = WasteInFacility.objects.filter(facility=facility)
-            return render(request, "citizens/citizens-status-containers.html", {'items': items_list, 'facilities': all_facilities, 'facility': facility})
-            return Citizen.objects.filter(**kwargs)
+                items_list = WasteInFacility.objects.filter(facility=facility, show_user=True)
+            context = {'items': items_list, 'facilities': all_facilities, 'facility': facility}
+            return render(request, "citizens/citizens-status-containers.html", context)
+            #return Citizen.objects.filter(**kwargs)
         else:
-            return render(request, "citizens/citizens-status-containers.html", {'items': items_list, 'facilities': all_facilities, 'facility': facility})
+            context ={'items': items_list, 'facilities': all_facilities, 'facility': facility}
+            return render(request, "citizens/citizens-status-containers.html", context)
     except Exception as e:
         print (show_exc(e))
         return redirect("citizens-login")

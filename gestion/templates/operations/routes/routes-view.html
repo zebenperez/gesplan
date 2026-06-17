@@ -26,8 +26,18 @@
 <div class="row justify-center">
     <div class="col-2"> {% trans "Residuo" %}:</div><div class="col-4"> {{obj.waste.waste.name|default:""}} </div> 
     <div class="col-2"> {% trans "Peso" %}:</div>
-    <div class="col-4"> {{obj.weight|default:""}} <br/> 
-        {% if obj.image %}<img src="{{obj.image.url}}" alt="imagen peso" width="50%"/>{% endif %}</div> 
+    <div class="col-4"> {{obj.weight|default:""}} <br/> <br/>
+        {#{% if obj.image %}<img src="{{obj.image.url}}" alt="imagen peso" width="50%"/> {% endif %}#}
+        {% if obj.image %}
+            {% with url=obj.image.url|lower %}
+                {% if ".pdf" in url %}
+                    <a href="{{ obj.image.url }}" target="_blank"> <i class="fas fa-file-pdf text-danger"></i> Ver PDF </a>
+                {% else %}
+                    <img src="{{ obj.image.url }}" alt="imagen peso" width="50%">
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    </div> 
 </div>
 
 <div class="d-flex justify-content-end p-2">

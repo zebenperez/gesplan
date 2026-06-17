@@ -3,12 +3,12 @@
 
 {% block central_content %}
     <ul class="nav nav-tabs mx-2 pl-2 pr-2 pt-2">
-        <li class="nav-item"> <a class="nav-link ark pointer active" data-url="{%url "citizens"%}" data-target="report-list">
+        <li class="nav-item"> <a class="nav-link ark pointer active" data-url="{%url "operation-report"%}" data-target="report-list">
+            Operaciones</a> </li>
+        <li class="nav-item"> <a class="nav-link ark pointer" data-url="{%url "citizens"%}" data-target="report-list">
             Recogidas</a> </li>
         <li class="nav-item"> <a class="nav-link ark pointer" data-url="{%url "contracts-report"%}" data-target="report-list">
             Administración</a> </li>
-        <li class="nav-item"> <a class="nav-link ark pointer" data-url="{%url "operation-report"%}" data-target="report-list">
-            Operaciones</a> </li>
         {%comment%}
         <li class="nav-item"> <a class="nav-link ark pointer" data-url="" data-target="report-list">
             Personal</a> </li>
@@ -20,6 +20,7 @@
         <li class="nav-item"> <a class="nav-link ark pointer" data-url="" data-target="report-list">
             Vehículos</a> </li>
     </ul>
-    <div id="report-list" class="ml-list">{% include "citizens/citizens.html" %}</div>
+    <div id="report-list" class="ml-list">{% include "operations/reports/operations.html" %}</div>
+    {#<div id="report-list" class="ml-list">{% include "citizens/citizens.html" %}</div>#}
     <script> $(".nav-link").click(function(){ $(".nav-link").removeClass("active"); $(this).addClass("active"); }); </script>
 {% endblock central_content %}

@@ -4,25 +4,29 @@
 <div class="row main-th py-3 m-0">
     <div class="col-1"> {% trans 'Fecha de inicio' %} </div>
     <div class="col-1"> {% trans 'Fecha de fin' %} </div>
-    <div class="col-2"> {% trans 'Residuo' %} </div>
+    <div class="col-1"> {% trans 'Residuo' %} </div>
     <div class="col-2"> {% trans 'Transportista' %} </div>
     <div class="col-2"> {% trans 'Punto limpio' %} </div>
     <div class="col-2"> {% trans 'Destino' %} </div>
     <div class="col-1"> {% trans 'Matrícula' %} </div>
     <div class="col-1"> {% trans 'Peso' %} </div>
+    <div class="col-1"> {% trans 'DIR' %} </div>
 </div>
 
 {% for item in items %}
     <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
         <div class="col-1">{{ item.ini_date|date:"d-m-Y H:i" }}</div>
         <div class="col-1">{{ item.ini_date|date:"d-m-Y H:i" }}</div>
-        <div class="col-2">{{ item.waste.waste.name }}</div>
+        <div class="col-1">{{ item.waste.waste.name }}</div>
         <div class="col-2">{{ item.driver.company }}</div>
         <div class="col-2">{{ item.source.description }}
             {%if item.source.code == "EXP"%}({{item.source_by_tray}}){%endif%}</div>
         <div class="col-2">{{ item.target.description }}</div>
         <div class="col-1">{{ item.truck.number_plate }}</div>
         <div class="col-1">{{ item.weight }}</div>
+        <div class="col-1">
+            <a href="{%url "operation-report-dir" item.id%}" target="_blank">{%trans "Documento de identificación de residuos"%}</a>
+        </div>
     </div>
 {% endfor %}
 

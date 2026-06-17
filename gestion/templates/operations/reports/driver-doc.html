@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 6.4.7.2 (Linux)"/>
+	<meta name="author" content=""/>
+	<meta name="created" content="2022-06-29T16:27:43"/>
+	<meta name="changedby" content=""/>
+	<meta name="changed" content="2022-07-20T13:42:43"/>
+	<meta name="AppVersion" content="16.0300"/>
+	<meta name="DocSecurity" content="0"/>
+	<meta name="HyperlinksChanged" content="false"/>
+	<meta name="LinksUpToDate" content="false"/>
+	<meta name="ScaleCrop" content="false"/>
+	<meta name="ShareDoc" content="false"/>
+	
+	<style type="text/css">
+		body,div,table,thead,tbody,tfoot,tr,th,td,p { font-family:"Calibri"; font-size:0.94em }
+		a.comment-indicator:hover + comment { background:#ffd;position:absolute;display:block;border:1px solid black;padding:0.5em; } 
+		a.comment-indicator { background:red; display:inline-block; border:1px solid black; width:0.5em; height:0.5em; } 
+        .cell {border: 1px solid #000000;}
+        .table{width: 100%; margin-bottom:20px}
+		comment { display:none;  } 
+	</style>
+</head>
+
+<body>
+    <hr>
+	<p><center>
+        <div> <a class="print-btn" id="print-btn" onclick="window.print()" style="cursor:pointer"> &#128424; Imprimir</a> </div>
+	</center></p>
+    <hr>
+    <table class="table" align="left" cellspacing="0" border="0">
+        <tr>
+            <td colspan=8 height="21" align="center" valign=bottom><b><font face="Arial" size=3 color="#000000">
+                DOCUMENTO DE IDENTIFICACIÓN DE RESIDUOS </font></b></td>
+        </tr>
+        <tr>
+            <td colspan=8 rowspan=2 height="38" align="center" valign=top><font face="Arial" size=1 color="#000000">
+                (Artículo 6.1 y Anexo III del R.D. 553/2020, de 2 de junio, por el que se regula el traslado de residuos en el interior del territorio del Estado. B.O.E. nº 171 del 19/07/2020)</font></td>
+        </tr>
+    </table>
+    <table class="table" cellspacing="0" border="0">
+        <tr>
+            <td class="cell"><font face="Arial" color="#000000">Documento de Identificación nº </font></td>
+            <td class="cell" sdnum="3082;0;000000000000000000000"><font face="Arial" color="#000000">{{datas.ref}}</font></td>
+        </tr>
+        <tr>
+            <td class="cell"><font face="Arial" color="#000000">Fecha inicio de traslado</font></td>
+            <td class="cell"><font face="Arial" color="#000000">{{datas.ini_date}}<br></font></td>
+        </tr>
+    </table>
+
+    {% include "drivers/driver-doc-ot.html" %}
+    {% include "drivers/driver-doc-st.html" %}
+    {% include "drivers/driver-doc-tt.html" %}
+    {% include "drivers/driver-doc-resp.html" %}
+    {% include "drivers/driver-doc-trans.html" %}
+    {% include "drivers/driver-doc-ar.html" %}
+    {% include "drivers/driver-doc-ro.html" %}
+
+    <table class="table" cellspacing="0" border="0">
+        <tr>
+            <td class="cell" colspan="4" bgcolor="#D9D9D9">
+                <b><font face="Arial" color="#000000">RESPONSABLE DEL PAGO DE LA TASA</font></b></td>
+        </tr>
+        <tr>
+            <td colspan="2"><font face="Arial" color="#000000">       
+                <input type="checkbox" name="operador"/> OPERADOR                
+                <input type="checkbox" name="transportista"/> TRANSPORTISTA                
+            </td>
+            <td colspan="2"><font face="Arial" color="#000000">       
+                <input type="checkbox" name="otros"/> OTROS especificar: <input type="text" name="otros_str"/></font></td>
+        </tr>
+    </table>
+</body>
+
+</html>

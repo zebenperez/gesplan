@@ -5,7 +5,9 @@ from datetime import datetime
 
 from gesplan.decorators import group_required
 from gesplan.commons import get_float, get_or_none, get_param, get_session, set_session, show_exc
-from .models import Facility, FacilityWasteManager, Route, RouteExt, Waste, WasteInFacility, Company, Employee, Truck, Tray
+from incidents.models import Incident
+from .models import Facility, FacilityWasteManager, FacilityActions
+from .models import Route, RouteExt, Waste, WasteInFacility, Company, Employee, Truck, Tray
 from .views import get_facilities
 
 
@@ -18,7 +20,17 @@ def index(request):
     routes = get_routes(request)
     routes_mpl = get_routes(request, "MPL")
     routes_ext = RouteExt.objects.all()
-    context = {"facilities":facilities,"facilities_mpl":facilities_mpl,"routes":routes,"routes_mpl":routes_mpl,"routes_ext":routes_ext}
+    actions = FacilityActions.objects.all()
+    incidents = Incident.objects.filter(closed=False)
+    context = {
+        "facilities":facilities,
+        "facilities_mpl":facilities_mpl,
+        "routes":routes,
+        "routes_mpl":routes_mpl,
+        "routes_ext":routes_ext,
+        "incidents":incidents,
+        "actions":actions
+    }
     return render(request, "operations/index.html", context)
 
 @group_required("admins",)
@@ -26,6 +38,13 @@ def facility_waste(request):
     fac = get_or_none(Facility, get_param(request.GET, "obj_id"))
     r = True if get_param(request.GET, "route") == "True" else False
     return render(request, "operations/facility-waste.html", {"item_list": fac.waste.filter(toRoute=r),})
+
+@group_required("admins",)
+def incidents_list(request):
+    val = get_param(request.GET, "value")
+    closed = True if val == "True" else False
+    incidents = Incident.objects.filter(closed=closed)
+    return render(request, "operations/incidents-list.html", {"incidents": incidents,})
 
 '''
     ROUTES
@@ -165,6 +184,10 @@ def report_search(request):
     set_session(request, "sr_operation_plate", get_param(request.GET, "sr_operation_plate"))
     return render(request, "operations/reports/operations-list.html", {"items": get_operation_report(request)})
 
+@group_required("admins",)
+def report_dir(request, route_id):
+    route = get_or_none(Route, route_id)
+    return render(request, "operations/reports/driver-doc.html", {'route': route, 'datas': route.jsonDoc()})
 
 '''
     Externals

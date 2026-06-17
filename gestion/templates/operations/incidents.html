@@ -1,0 +1,13 @@
+{% load i18n %}
+
+<div class="m-4">
+    <select class="form-control ark_change" data-url="{% url "operation-incidents-list" %}" data-target="incidents-container">
+        <option value="False"> {% trans "Abiertas" %} </option>
+        <option value="True"> {% trans "Cerradas" %} </option>
+    </select>
+</div>
+
+<div class="container" id="incidents-container">
+    {% include "operations/incidents-list.html" %}
+</div>
+

@@ -2,7 +2,8 @@
 def route_to_json(obj):
     result = {}
     try :
-        result["ref"] = "3800000471{}{}".format(obj.ini_date.year, str(obj.ref).zfill(7))
+        #result["ref"] = "3800000471{}{}".format(obj.ini_date.year, str(obj.ref).zfill(7))
+        result["ref"] = "3500000514{}{}".format(obj.ini_date.year, str(obj.ref).zfill(7))
         result["ini_date"] = "{}".format(obj.ini_date.strftime("%d-%m-%Y %H:%M"))
         result["ot_nima"] = "{}".format(obj.source.nima)
         result["ot_address"] = "{}".format(obj.source.address)

@@ -32,7 +32,7 @@
      
         <div class="col-12 my-4">
             <button id="btn-next" class="btn btn-primary w-100 ark" data-url="{% url "pwa-driver-routes-waste" %}" 
-                data-target="div-step2" data-value="{{truck.base_station.id}}" data-tray="">
+                data-target="div-step2" data-value="{{truck.base_station.id}}" data-tray="" disabled>
                 <strong>{% trans "CONTINUAR" %}</strong></button>
         </div>
             
@@ -40,8 +40,14 @@
         <div class="col-12 my-2"  id="div-step3"> </div>
     </div>
     <script>
+        function enableBtn(){
+            if ($("#source").val()) { $("#btn-next").prop("disabled", ""); }
+            else { $("#btn-next").prop("disabled", "disabled");} 
+        }
         $("#source").change(function(){ $("#btn-next").data("value", $(this).val()); });
         $("#tray").change(function(){ $("#btn-next").data("tray", $(this).val()); });
+        $("#source").change(function(){enableBtn();});
+        enableBtn();
     </script>
 
     {%comment%}

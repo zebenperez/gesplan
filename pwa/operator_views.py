@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
-from datetime import datetime
+from datetime import datetime, timedelta
+from pytz import timezone
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -63,10 +64,14 @@ def operator_wastes_save(request):
 '''
     CITIZENS
 '''
+def get_offset():
+    # Cambio horario
+    tz = timezone('Atlantic/Canary')
+    return 1 if tz.dst(datetime.now()) != timedelta(0) else 0
+
 @group_required_pwa("operators")
 def operator_citizens(request):
     # Is summer time in effect?
-
 
     now = datetime.now()
     is_monday = datetime.today().weekday() == 0
@@ -85,15 +90,7 @@ def operator_citizens(request):
             start_shift=start_shift.replace(hour=14, minute=30)
         end_shift = end_shift.replace(hour=23, minute=59)
 
-    # Cambio horario
-    from pytz import timezone
-    from datetime import timedelta
-    tz = timezone('Atlantic/Canary')
-    if tz.dst(datetime.now()) != timedelta(0):
-        offset = 1
-    else:
-        offset = 0
-
+    offset = get_offset()
     end_shift -= timedelta(hours=offset)
     start_shift -= timedelta(hours=offset)
     # Fin cambio horario
@@ -120,11 +117,12 @@ def operator_citizens_save(request):
     obj.identification = get_param(request.POST, "identification")
     obj.phone = get_param(request.POST, "phone")
     obj.email = get_param(request.POST, "email")
-    obj.plate = get_param(request.POST, "plate")
+    obj.plate = get_param(request.POST, "plate").upper()
     obj.address = get_param(request.POST, "address")
     obj.observations = get_param(request.POST, "observations")
     obj.save()
-    return render(request, "operator/citizens-waste-form.html", {'obj': obj, 'waste_list': Waste.objects.all()})
+    waste_list = Waste.objects.all().exclude(code__contains='MPL')
+    return render(request, "operator/citizens-waste-form.html", {'obj': obj, 'waste_list': waste_list})
     #return redirect(reverse("pwa-operator-citizens"))
 
 @group_required_pwa("operators")

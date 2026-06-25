@@ -18,7 +18,8 @@ from .forms import *
 @group_required("admins",)
 def index(request):
     set_initial_dates(request)
-    return render(request, "report-index.html", get_citizens_context(request))
+    return render(request, "report-index.html", {})
+    #return render(request, "report-index.html", get_citizens_context(request))
 
 '''
     CITIZENS
@@ -446,3 +447,22 @@ def citizens_info(request):
         return JsonResponse(json_data)
     
     return JsonResponse(json_data)
+
+@group_required_json("admins","operators")
+def citizens_info2(request):
+    json_data = {'citizen': None, 'error': True,}
+    try:
+        plate = get_param(request.GET, "plate")
+        if plate != "":
+            citizen = Citizen.objects.filter(plate__iexact=plate).order_by("-date").first()
+            l = Citizen.objects.filter(plate__iexact=plate).order_by("-date")
+            if citizen != None:
+                town = citizen.town.id if citizen.town != None else ""
+                json_data = { 'dni': citizen.identification, 'town': town, 'observations': citizen.observations, 'error': False, }
+                return JsonResponse(json_data, status=200)
+        json_data['error_message'] = "No se ha encontrado el ciudadano"
+        return JsonResponse(json_data)
+    except Exception as e:
+        print (show_exc(e))
+        json_data['error_message'] = "Error al procesar la solicitud"
+        return JsonResponse(json_data)

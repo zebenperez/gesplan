@@ -18,10 +18,12 @@
             <input type="text" class="form-control orange-inp" id="weight" name="weight" placeholder="{%trans "Introduzca el peso"%}"/>
             <span class="text-alert orange"><small>{% trans "* Este campo es obligatorio" %}</small></span>
         </div>
+        {%comment%}
         <div class="col-12 mt-3">
             <label for="image" class="btn">{% trans "Imagen del peso" %}</label>
             <input type="file" class="form-control" id="image" name="file"/>
         </div>
+        {%endcomment%}
         <div class="col-12 mt-3">
             <label for="image" class="btn">{% trans "Sacar foto" %}</label>
             <input type="file" class="form-control" id="image2" name="file2" accept="image/*" capture="environment"/>

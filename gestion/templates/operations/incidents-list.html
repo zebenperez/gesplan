@@ -8,7 +8,7 @@
     <div class="col-3"> {% trans 'Descripción' %} </div>
     <div class="col-1"> {% trans 'Creada en' %} </div>
     <div class="col-1"> {% trans 'Cerrada en' %} </div>
-    <div class="col-1"> {% trans 'Cerrada' %} </div>
+    <div class="col-1"> {% trans 'Estado' %} </div>
     <div class="col-1"></div>
 </div>
 
@@ -21,8 +21,11 @@
         <div class="col-3">{{ item.description }}</div>
         <div class="col-1">{{ item.creation_date|date:"d-m-Y H:i" }}</div>
         <div class="col-1">{{ item.closed_date|date:"d-m-Y H:i" }}</div>
-        <div class="col-1">{%if item.closed%}<i class="fas fa-check"></i>{%else%}<i class="fas fa-times"></i>{%endif%}</div>
+        {#<div class="col-1">{%if item.closed%}<i class="fas fa-check"></i>{%else%}<i class="fas fa-times"></i>{%endif%}</div>#}
+        <div class="col-1">{%if item.closed%}{% trans "Cerrada" %}{%else%}{% trans "Abierta" %}{%endif%}</div>
         <div class="col-1 text-end">
+            <a class="btn btn-sm ark" data-url="{%url "operation-incidents-form"%}" data-target-modal="common-modal"
+                data-obj_id="{{item.id}}" title="{%trans 'Editar'%}"><i class="fas fa-edit"></i> </a>
         </div>
     </div>
 {% endfor %}

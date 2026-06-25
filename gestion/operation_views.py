@@ -39,12 +39,25 @@ def facility_waste(request):
     r = True if get_param(request.GET, "route") == "True" else False
     return render(request, "operations/facility-waste.html", {"item_list": fac.waste.filter(toRoute=r),})
 
+'''
+    INCIDENTS
+'''
 @group_required("admins",)
 def incidents_list(request):
     val = get_param(request.GET, "value")
+    if val != "":
+        set_session(request, "op_incidents_closed", val)
+    else:
+        val = get_session(request, "op_incidents_closed")
     closed = True if val == "True" else False
     incidents = Incident.objects.filter(closed=closed)
     return render(request, "operations/incidents-list.html", {"incidents": incidents,})
+
+@group_required("admins",)
+def incidents_form(request):
+    obj = get_or_none(Incident, get_param(request.GET, "obj_id"))
+    return render(request, "operations/incidents-form.html", {"obj": obj,})
+
 
 '''
     ROUTES

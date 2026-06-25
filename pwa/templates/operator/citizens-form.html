@@ -7,7 +7,20 @@
     {% csrf_token %}
     <input type="hidden" id="obj_id" name="obj_id" value="{{obj.id}}" />
     <div class="row my-2">
-        <div class="h1-pwa col-12">Término Municipal</div>
+        <div class="h1-pwa col-12 mt-3"><strong>Matrícula</strong></div>
+        <div class="col-8">
+            <input class="form form-control w-100 orange-inp" type="text" value="{{obj.plate}}" id="plate" name="plate" />
+        </div>
+        <div class="col-4 text-end">
+            <button type="button" class="btn btn-sm" id="btn-plate"><i class="fas fa-search"></i> {% trans "Comprobar matrícula" %}</button>
+        </div>
+        <div class="col-12" id="plate-result"></div>
+        <div class="h1-pwa col-12 mt-3">DNI/NIF</div>
+        <div class="col-12">
+            <input class="form form-control w-100 orange-inp" type="text" value="{{obj.identification}}" id="identification" 
+                name="identification" />
+        </div>
+        <div class="h1-pwa col-12 mt-3">Término Municipal</div>
         <div class="col-12">
             <select class="form form-control w-100 orange-sel" id="town" name="town">
                 {% for item in town_list %}
@@ -15,11 +28,13 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="h1-pwa col-12 mt-3">DNI/NIF</div>
+        <div class="h1-pwa col-12 mt-3">Código Postal</div>
         <div class="col-12">
-            <input class="form form-control w-100 orange-inp" type="text" value="{{obj.identification}}" id="identification" 
-                name="identification" />
+            <input class="form form-control w-100 orange-inp autosave" type="text" value="{{obj.observations}}" id="observations" 
+                name="observations" />
         </div>
+
+        {%comment%}
         <div class="h1-pwa col-12 mt-3">Teléfono</div>
         <div class="col-12">
             <input class="form form-control w-100 orange-inp" type="text" value="{{obj.phone}}" id="phone" name="phone" />
@@ -28,21 +43,14 @@
         <div class="col-12">
             <input class="form form-control w-100 orange-inp" type="text" value="{{obj.email}}" id="email" name="email" />
         </div>
-        <div class="h1-pwa col-12 mt-3">Matrícula</div>
-        <div class="col-12">
-            <input class="form form-control w-100 orange-inp" type="text" value="{{obj.plate}}" id="plate" name="plate" />
-        </div>
+        {%endcomment%}
+        {%comment%}
         <div class="h1-pwa col-12 mt-3">Dirección</div>
         <div class="col-12">
             <input class="form form-control w-100 orange-inp autosave" type="text" value="{{obj.address}}" id="address" 
                 name="address" />
         </div>
-        <div class="h1-pwa col-12 mt-3">Código Postal</div>
-        <div class="col-12">
-            <input class="form form-control w-100 orange-inp autosave" type="text" value="{{obj.observations}}" id="observations" 
-                name="observations" />
-        </div>
-
+        {%endcomment%}
         <div class="row m-0 mt-5">
             {% if obj != None %} <div class="col-6 text-center"> {% else %} <div class="col-12 text-center"> {% endif %}
                 <button class="btn btn-primary w-100 saveform" data-form="frmCitizen" data-target="div-content">
@@ -69,34 +77,25 @@
             }
         });
 
-        $('#plate').keyup(function() {
-            // Call to an url to get the info of the plate with AJAX. The response will be a JSON object
-
+        {#$('#plate').keyup(function() {#}
+        $('#btn-plate').click(function() {
             $.ajax({
-                url: "{% url 'citizens-info' %}",
-                type: "POST",
-                data: {
-                    'plate': $(this).val(),
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
+                url: "{% url 'citizens-info2' %}",
+                type: "GET",
+                data: {'plate': $("#plate").val(),},
                 success: function(data) {
-                    // If the response is ok, fill the form with the data
                     if (!data.error) {
-                        $('#identification').val(data.citizen.identification);
-                        $('#phone').val(data.citizen.phone);
-                        $('#email').val(data.citizen.email);
-                        $('#address').val(data.citizen.address);
-                        $('#observations').val(data.citizen.postcode);
+                        $('#identification').val(data.dni);
+                        $('#observations').val(data.observations);
+                        $('#town').val(data.town);
+                    }
+                    else{
+                        $("#plate-result").html("Matrícula no encontrada");
                     }
                 },
-                error: function(xhr, status, error) {
-                    // If there is an error, show an error message
-                    alert(status);
-                    alert(error);
-                }
+                error: function(xhr, status, error) { console.log(error); }
             });
         });
-
     });
 </script>
 

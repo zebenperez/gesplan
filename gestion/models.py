@@ -715,6 +715,10 @@ class Route(models.Model):
     tray = models.ForeignKey(Tray, on_delete=models.SET_NULL, verbose_name='Bandeja', null=True, related_name="routes")
     #company = models.ForeignKey(Company, on_delete=models.SET_NULL, verbose_name=_('Company'), null=True, blank=True, default=None)
 
+    @property
+    def ref(self):
+        return "3500000514{}{}".format(self.ini_date.year, str(self.pk).zfill(7))
+
     def jsonDoc(self):
         return route_to_json(self)
 

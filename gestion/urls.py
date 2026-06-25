@@ -87,6 +87,7 @@ urlpatterns = [
     #---------------------- OPERATION -----------------------
     path('operation/index', operation_views.index, name='operation-index'),
     path('operation/incidents/list', operation_views.incidents_list, name='operation-incidents-list'),
+    path('operation/incidents/form', operation_views.incidents_form, name='operation-incidents-form'),
     path('operation/routes/view', operation_views.routes_view, name='operation-routes-view'),
     path('operation/routes/list', operation_views.routes_list, name='operation-routes-list'),
     path('operation/routes-ext/list', operation_views.routes_ext_list, name='operation-routes-ext-list'),

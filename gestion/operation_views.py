@@ -155,6 +155,7 @@ def get_operation_report(request):
     #idate_end = get_session(request, "sr_operation_idate_end")
     edate_ini = get_session(request, "sr_operation_edate_ini")
     edate_end = get_session(request, "sr_operation_edate_end")
+    dir = get_session(request, "sr_operation_dir")
     waste = get_session(request, "sr_operation_waste")
     comp = get_session(request, "sr_operation_comp")
     fac = get_session(request, "sr_operation_fac")
@@ -180,6 +181,9 @@ def get_operation_report(request):
         kwargs["target__id"] = target
     if plate != "":
         kwargs["truck__number_plate__icontains"] = plate
+    if dir != "":
+        kwargs["ini_date__year"] = dir[10:14]
+        kwargs["pk"] = dir[14:]
     #print(kwargs)
     return Route.objects.filter(**kwargs).exclude(target__code = "EXP")
 
@@ -199,7 +203,13 @@ def report_search(request):
     set_session(request, "sr_operation_fac", get_param(request.GET, "sr_operation_fac"))
     set_session(request, "sr_operation_target", get_param(request.GET, "sr_operation_target"))
     set_session(request, "sr_operation_plate", get_param(request.GET, "sr_operation_plate"))
-    return render(request, "operations/reports/operations-list.html", {"items": get_operation_report(request)})
+    set_session(request, "sr_operation_dir", get_param(request.GET, "sr_operation_dir"))
+    try:
+        return render(request, "operations/reports/operations-list.html", {"items": get_operation_report(request)})
+    except Exception as e:
+        print (show_exc(e))
+        # Handle the exception or log it
+        return render(request, "operations/reports/operations-list.html", {"items": []})
 
 @group_required("admins",)
 def report_dir(request, route_id):

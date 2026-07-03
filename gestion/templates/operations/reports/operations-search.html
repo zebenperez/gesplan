@@ -62,8 +62,14 @@
                 </select>
             </div>
         </div>
-
+        {% comment %} Add search by DIR field {% endcomment %}
         <div class="row">
+            <div class="col-2 py-2 text-center d-none d-lg-block"> <span>{% trans "DIR:" %}</span> </div>
+            <div class="col-10"> <input type="text" class="form-control form-control-dark w-100" 
+                name="sr_operation_dir" id="sr_operation_dir" value="{{request.session.sr_operation_dir}}"/> </div>
+        </div>
+
+        <div class="row mt-2">
             <div class="col-12 text-center">
                 <button class="btn btn-default saveform w-25" style="border: 1px solid #a58a11;"  data-form="form-search" 
                     data-target="operations-list"> <i class="fas fa-search"></i></button>

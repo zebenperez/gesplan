@@ -1,20 +1,67 @@
 {% load i18n %}
 
-<div class="incident-filter my-4 mx-2">
-    <label>
-        <span class="material-symbols-outlined"><i class='fas fa-exclamation-triangle'></i></span>
-    	{% trans "Estado de la incidencia" %}:
-    </label>
-    <select class="form-control ark_change" data-url="{% url "operation-incidents-list" %}" data-target="incidents-container">
+<div class="incident-filter-no my-4 mx-2 row">
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <label>
+            <span class="material-symbols-outlined"><i class='fas fa-search'></i></span>
+        </label>
+        <label>
+            <span class="material-symbols-outlined"><i class='fas fa-exclamation-triangle'></i></span>
+        	{% trans "Estado de la incidencia" %}:
+        </label>
+        <select class="form-control ark_change" data-url="{% url "operation-incidents-list" %}" data-target="incidents-container" name="op_incidents_closed" id="op_incidents_closed" data-name="op_incidents_closed">
 	        <option value="False" {%if request.session.op_incidents_closed == "False"%}selected{%endif%}>{% trans "Abiertas" %} </option>
         	<option value="True" {%if request.session.op_incidents_closed == "True"%}selected{%endif%}>{% trans "Cerradas" %} </option>
-    </select>
+        </select>   
+    </div>
+    <!-- Filtro de rango de fechas -->
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <label>
+            <span class="material-symbols-outlined"><i class='fas fa-calendar-alt'></i></span>
+            {% trans "Filtrar por fecha" %}:
+        </label>
+        <!-- Two input field type date, from and to -->
+        <div class="input-group">
+            <input type="date" class="form-control" id="date_from" placeholder="{% trans 'Desde' %}" value="{{ request.session.op_incidents_date_from }}" data-url="{% url "operation-incidents-list" %}" data-target="incidents-container" data-name="op_incidents_date_from"> 
+            <input type="date" class="form-control" id="date_to" placeholder="{% trans 'Hasta' %}" value="{{ request.session.op_incidents_date_to }}"  data-url="{% url "operation-incidents-list" %}" data-target="incidents-container" data-name="op_incidents_date_to">
+        </div>
+
+    </div>
+    <!-- Filtro por operario -->
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <label>
+            <span class="material-symbols-outlined"><i class='fas fa-user'></i></span>
+            {% trans "Filtrar por operario" %}:
+        </label>
+        <select class="form-control ark_change" data-url="{% url "operation-incidents-list" %}" data-target="incidents-container" name="op_incidents_user_filter" id="op_incidents_user_filter" data-name="op_incidents_user_filter">
+            <option value="" {% if not request.session.op_incidents_user_filter %}selected{% endif %}>{% trans "Todos" %}</option>
+            {% for user in users %}
+                <option value="{{ user.id }}" {% if request.session.op_incidents_user_filter == user.id|stringformat:"s" %}selected{% endif %}>{{ user.full_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    
+
 </div>
 
 <div class="container" id="incidents-container">
     {% include "operations/incidents-list.html" %}
 </div>
-
+<script>
+    // Check if the value of the input is empty, if it is empty, set it to today's date
+    if ($('#date_from').val() == '') {
+        $('#date_from').val(new Date().toISOString().split('T')[0]);
+    }
+    if ($('#date_to').val() == '') {
+        $('#date_to').val(new Date().toISOString().split('T')[0]);
+    }
+    // Set max attribute of from_date and to_date inputs to today's date using JQuery
+    $('#date_from').attr('max', new Date().toISOString().split('T')[0]);
+    $('#date_to').attr('max', new Date().toISOString().split('T')[0]);
+    // add class ark_change to the inputs and add data-url and data-target attributes to the inputs
+    $('#date_from').addClass('ark_change');
+    $('#date_to').addClass('ark_change');
+</script>
 </body>
 </html>
 

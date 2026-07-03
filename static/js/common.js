@@ -24,7 +24,23 @@ function ajaxGet(url, datas, target, modal_target)
                 if (target != "")
                     $('#'+target).html(data);
         },
-        error : function(e){alert("Error: "+e.responseText);},
+        error : function(e){
+            console.log("Error: "+e.responseText);
+            // Check if the error is a 501 Not Implemented error
+            if (e.status === 501) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Función no implementada',
+                    text: "Lo sentimos, esta función aún no está implementada. Por favor, inténtelo de nuevo más tarde.",
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: "Lo sentimos, ocurrió un error al procesar la solicitud. Por favor, inténtelo de nuevo más tarde.",
+                });
+            }
+        },
         complete : function(){unsetWait();}
         //complete : function(){$("body").css("cursor", "default"); $("body").removeClass("loading-");}
     });
@@ -50,7 +66,23 @@ function ajaxGetAppend(url, datas, target, modal_target)
                 if (target != "")
                     $('#'+target).append(data);
         },
-        error : function(e){console.log("Error: "+e.responseText);},
+        error : function(e){
+            console.log("Error: "+e.responseText);
+            // Check if the error is a 501 Not Implemented error
+            if (e.status === 501) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Función no implementada',
+                    text: "Lo sentimos, esta función aún no está implementada. Por favor, inténtelo de nuevo más tarde.",
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: "Lo sentimos, ocurrió un error al procesar la solicitud. Por favor, inténtelo de nuevo más tarde.",
+                });
+            }
+        },
         complete : function(){$("body").css("cursor", "default");}
     });
 };

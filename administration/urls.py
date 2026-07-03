@@ -30,5 +30,9 @@ urlpatterns = [
     #---------------------- REPORTS -----------------------
     path('contracts-report', views.contracts_report, name='contracts-report'),
     path('contracts-report-search', views.contracts_report_search, name='contracts-report-search'),
+    path('facilities-report', views.facilities_report, name='facilities-report'),
+    path('facilities-report-search', views.facilities_report_search, name='facilities-report-search'),
+    path('vehicles-report', views.vehicles_report, name='vehicles-report'),
+    path('vehicles-report-search', views.vehicles_report_search, name='vehicles-report-search'),
 ]
 

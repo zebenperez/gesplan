@@ -23,6 +23,7 @@ def index(request):
         routes_ext = RouteExt.objects.all()
         actions = FacilityActions.objects.all()
         incidents = Incident.objects.filter(closed=False)
+        users = Employee.objects.filter(rol__code="operator")
         context = {
             "facilities":facilities,
             "facilities_mpl":facilities_mpl,
@@ -30,6 +31,7 @@ def index(request):
             "routes_mpl":routes_mpl,
             "routes_ext":routes_ext,
             "incidents":incidents,
+            "users": users,
             "actions":actions
         }
         return render(request, "operations/index.html", context)
@@ -48,14 +50,50 @@ def facility_waste(request):
 '''
 @group_required("admins",)
 def incidents_list(request):
-    val = get_param(request.GET, "value")
-    if val != "":
-        set_session(request, "op_incidents_closed", val)
-    else:
-        val = get_session(request, "op_incidents_closed")
-    closed = True if val == "True" else False
-    incidents = Incident.objects.filter(closed=closed)
-    return render(request, "operations/incidents-list.html", {"incidents": incidents,})
+    try:
+        val = get_param(request.GET, "value")
+        fname = get_param(request.GET, "name")
+        if val != "":
+            set_session(request, fname, val)
+        else:
+            val = get_session(request, fname)
+
+        users = Employee.objects.filter(rol__code="operator")
+        # Recovery date range
+        date_ini = get_session(request, "op_incidents_date_from", None)
+        if date_ini == None:
+            now = datetime.now()
+            date_ini = now.replace(hour=0, minute=0)
+            set_session(request, "op_incidents_date_from", date_ini)
+
+        date_end = get_session(request, "op_incidents_date_to", None)
+        if date_end == None:
+            now = datetime.now()
+            date_end = now.replace(hour=23, minute=59)
+            set_session(request, "op_incidents_date_to", date_end)
+        closed = get_session(request, "op_incidents_closed")
+
+        user_filter = get_session(request, "op_incidents_user_filter", None)
+        print ("user_filter", user_filter)
+
+
+        kwargs = {}
+        if date_ini != "":
+            kwargs["creation_date__gte"] = date_ini
+        if date_end != "":
+            kwargs["creation_date__lte"] = date_end
+        if closed != "":
+            kwargs["closed"] = closed == "True"
+        if user_filter != "":
+            kwargs["owner"] = user_filter
+        
+
+
+
+        incidents = Incident.objects.filter(**kwargs)
+        return render(request, "operations/incidents-list.html", {"incidents": incidents, "users": users})
+    except Exception as e:
+        return HttpResponse(show_exc(e), status=500)
 
 @group_required("admins",)
 def incidents_form(request):

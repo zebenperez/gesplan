@@ -7,6 +7,7 @@ from datetime import datetime
 from gesplan.decorators import group_required
 from gesplan.commons import get_float, get_or_none, get_param, get_session, set_session, show_exc
 from .models import Contract, ContractStatus, ContractLot, Invoice, Epigraph
+from gesplan.commons import show_exc
 
 
 #@group_required("admins",)
@@ -236,5 +237,45 @@ def contracts_report_search(request):
     set_session(request, "sr_contract_status", get_param(request.GET, "sr_contract_status"))
     set_session(request, "sr_contract_epigraph", get_param(request.GET, "sr_contract_epigraph"))
     return render(request, "contracts/reports/contracts-list.html", {"items": get_contracts_report(request)})
+
+@group_required("admins",)
+def facilities_report(request):
+    return HttpResponse("Función no implementada aún", status=501)
+    try:
+        context = {"items": [], "status_list": ContractStatus.objects.all(), "epigraph_list": Epigraph.objects.all()}
+        return render(request, "contracts/reports/facilities.html", context)
+    except Exception as e:
+        print(show_exc(e))
+        return HttpResponse(f"Error: {show_exc(e)}", status=500)
+
+@group_required("admins",)
+def facilities_report_search(request):
+    set_session(request, "sr_contract_idate_ini", get_param(request.GET, "sr_contract_idate_ini"))
+    set_session(request, "sr_contract_idate_end", get_param(request.GET, "sr_contract_idate_end"))
+    set_session(request, "sr_contract_edate_ini", get_param(request.GET, "sr_contract_edate_ini"))
+    set_session(request, "sr_contract_edate_end", get_param(request.GET, "sr_contract_edate_end"))
+    set_session(request, "sr_contract_amount_ini", get_param(request.GET, "sr_contract_amount_ini"))
+    set_session(request, "sr_contract_amount_end", get_param(request.GET, "sr_contract_amount_end"))
+    set_session(request, "sr_contract_status", get_param(request.GET, "sr_contract_status"))
+    set_session(request, "sr_contract_epigraph", get_param(request.GET, "sr_contract_epigraph"))
+    return render(request, "contracts/reports/facilities-list.html", {"items": get_contracts_report(request)})
+
+@group_required("admins",)
+def vehicles_report(request):
+    return HttpResponse("Función no implementada aún", status=501)
+    context = {"items": [], "status_list": ContractStatus.objects.all(), "epigraph_list": Epigraph.objects.all()}
+    return render(request, "contracts/reports/vehicles.html", context)  
+
+@group_required("admins",)
+def vehicles_report_search(request):
+    set_session(request, "sr_contract_idate_ini", get_param(request.GET, "sr_contract_idate_ini"))
+    set_session(request, "sr_contract_idate_end", get_param(request.GET, "sr_contract_idate_end"))
+    set_session(request, "sr_contract_edate_ini", get_param(request.GET, "sr_contract_edate_ini"))
+    set_session(request, "sr_contract_edate_end", get_param(request.GET, "sr_contract_edate_end"))
+    set_session(request, "sr_contract_amount_ini", get_param(request.GET, "sr_contract_amount_ini"))
+    set_session(request, "sr_contract_amount_end", get_param(request.GET, "sr_contract_amount_end"))
+    set_session(request, "sr_contract_status", get_param(request.GET, "sr_contract_status"))
+    set_session(request, "sr_contract_epigraph", get_param(request.GET, "sr_contract_epigraph"))
+    return render(request, "contracts/reports/vehicles-list.html", {"items": get_contracts_report(request)})
 
 

@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from datetime import datetime
 
 from gesplan.decorators import group_required_pwa
-from gesplan.commons import get_or_none, get_param, show_exc
+from gesplan.commons import get_or_none, get_param, show_exc, set_session, get_session
 from gestion.models import Employee, FacilityManteinance
 from incidents.models import Incident, IncidentType
 
@@ -19,8 +19,12 @@ def incidents(request):
     now = datetime.now()
     idate = now.replace(hour=0, minute=0)
     edate = now.replace(hour=23, minute=59)
-    item_list = Incident.objects.filter(owner=request.user, creation_date__range=(idate, edate))
-    return render(request, "incidents/incidents.html", {'item_list': item_list})
+    item_list = Incident.objects.filter(owner=request.user, creation_date__range=(idate, edate)).order_by("-creation_date")
+    set_session(request, "op_incidents_date_from", idate)
+    print(1)
+    users_list = Employee.objects.filter(rol__code="operator").values_list("user", flat=True)
+    set_session(request, "op_incidents_date_to", edate)
+    return render(request, "incidents/incidents.html", {'item_list': item_list, 'users': users_list, 'date_from': idate, 'date_to': edate})
 
 @group_required_pwa("drivers", "drivers_mpl", "operators")
 def incidents_add(request):

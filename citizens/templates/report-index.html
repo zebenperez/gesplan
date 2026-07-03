@@ -15,9 +15,9 @@
         <li class="nav-item"> <a class="nav-link ark pointer" data-url="" data-target="report-list">
             Materiales</a> </li>
         {%endcomment%}
-        <li class="nav-item"> <a class="nav-link ark pointer" data-url="" data-target="report-list">
+        <li class="nav-item"> <a class="nav-link ark pointer" data-url="{% url "facilities-report" %}" data-target="report-list">
             Instalaciones</a> </li>
-        <li class="nav-item"> <a class="nav-link ark pointer" data-url="" data-target="report-list">
+        <li class="nav-item"> <a class="nav-link ark pointer" data-url="{% url "vehicles-report" %}" data-target="report-list">
             Vehículos</a> </li>
     </ul>
     <div id="report-list" class="ml-list">{% include "operations/reports/operations.html" %}</div>

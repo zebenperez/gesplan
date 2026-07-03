@@ -13,25 +13,29 @@ from .views import get_facilities
 
 @group_required("admins",)
 def index(request):
-    #facilities = Facility.objects.filter(description__contains="Punto")
-    #facilities_mpl = Facility.objects.filter(code__startswith="MPL-")
-    facilities = Facility.getPL()
-    facilities_mpl = Facility.getMPL()
-    routes = get_routes(request)
-    routes_mpl = get_routes(request, "MPL")
-    routes_ext = RouteExt.objects.all()
-    actions = FacilityActions.objects.all()
-    incidents = Incident.objects.filter(closed=False)
-    context = {
-        "facilities":facilities,
-        "facilities_mpl":facilities_mpl,
-        "routes":routes,
-        "routes_mpl":routes_mpl,
-        "routes_ext":routes_ext,
-        "incidents":incidents,
-        "actions":actions
-    }
-    return render(request, "operations/index.html", context)
+    try:
+        #facilities = Facility.objects.filter(description__contains="Punto")
+        #facilities_mpl = Facility.objects.filter(code__startswith="MPL-")
+        facilities = Facility.getPL()
+        facilities_mpl = Facility.getMPL()
+        routes = get_routes(request)
+        routes_mpl = get_routes(request, "MPL")
+        routes_ext = RouteExt.objects.all()
+        actions = FacilityActions.objects.all()
+        incidents = Incident.objects.filter(closed=False)
+        context = {
+            "facilities":facilities,
+            "facilities_mpl":facilities_mpl,
+            "routes":routes,
+            "routes_mpl":routes_mpl,
+            "routes_ext":routes_ext,
+            "incidents":incidents,
+            "actions":actions
+        }
+        return render(request, "operations/index.html", context)
+    except Exception as e:
+        print (show_exc(e))
+        return redirect("gesplan:home")
 
 @group_required("admins",)
 def facility_waste(request):

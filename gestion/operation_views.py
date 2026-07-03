@@ -181,6 +181,7 @@ def get_operation_report(request):
         kwargs["target__id"] = target
     if plate != "":
         kwargs["truck__number_plate__icontains"] = plate
+
     if dir != "":
         kwargs["ini_date__year"] = dir[10:14]
         kwargs["pk"] = dir[14:]
@@ -208,7 +209,6 @@ def report_search(request):
         return render(request, "operations/reports/operations-list.html", {"items": get_operation_report(request)})
     except Exception as e:
         print (show_exc(e))
-        # Handle the exception or log it
         return render(request, "operations/reports/operations-list.html", {"items": []})
 
 @group_required("admins",)

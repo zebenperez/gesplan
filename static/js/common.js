@@ -235,7 +235,16 @@ function submitForm(frm, target)
         success: function (data) {
             $('#'+target).html(data);
         },
-        error: function (data) { alert("Error: "+data.responseText); },
+        //error: function (data) { alert("Error: "+data.responseText); },
+        // if error => Popup with error message using SweetAlert2
+        error: function (data) { 
+            console.log("Error: "+data.responseText); 
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "Lo sentimos, ocurrió un error al procesar la solicitud. Por favor, inténtelo de nuevo más tarde.",
+            });
+        },
         complete : function(){unsetWait();}
         //complete : function(){$("body").css("cursor", "default");}
     });

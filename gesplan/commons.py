@@ -112,10 +112,32 @@ def get_items_per_page():
         return 20
 
 def set_session(request, key, default=""):
-    request.session[key] = request.GET[key] if key in request.GET else default
+    value = request.GET[key] if key in request.GET else default
+    try:
+        # Serialize datetime objects to ISO string for JSON-safe sessions
+        if isinstance(value, datetime.datetime):
+            request.session[key] = value.isoformat()
+        else:
+            request.session[key] = value
+    except Exception:
+        request.session[key] = value
 
 def get_session(request, key, default=""):
-    return request.session[key] if key in request.session else default
+    if key in request.session:
+        val = request.session[key]
+        # Try to parse ISO datetime strings back to datetime
+        try:
+            if isinstance(val, str):
+                # datetime.fromisoformat handles both date and datetime strings
+                try:
+                    return datetime.datetime.fromisoformat(val)
+                except Exception:
+                    return val
+            return val
+        except Exception:
+            return val
+    else:
+        return default
 
 def get_random_str(n):
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))

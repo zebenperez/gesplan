@@ -5,6 +5,8 @@ from datetime import datetime
 
 from gesplan.decorators import group_required
 from gesplan.commons import get_float, get_or_none, get_param, get_session, set_session, show_exc
+# import User
+from django.contrib.auth.models import User
 from incidents.models import Incident
 from .models import Facility, FacilityWasteManager, FacilityActions
 from .models import Route, RouteExt, Waste, WasteInFacility, Company, Employee, Truck, Tray
@@ -53,10 +55,11 @@ def incidents_list(request):
     try:
         val = get_param(request.GET, "value")
         fname = get_param(request.GET, "name")
-        if val != "":
-            set_session(request, fname, val)
-        else:
-            val = get_session(request, fname)
+        # if val != "":
+        #     set_session(request, fname, val)
+        # else:
+        #     val = get_session(request, fname)
+        val = set_session(request, fname, val)
 
         users = Employee.objects.filter(rol__code="operator")
         # Recovery date range
@@ -85,14 +88,16 @@ def incidents_list(request):
         if closed != "":
             kwargs["closed"] = closed == "True"
         if user_filter != "":
-            kwargs["owner"] = user_filter
-        
+            user = get_or_none(Employee, user_filter)
+            print(user)
+            if user != None:
+                kwargs["owner__employee"] = user
 
 
-
-        incidents = Incident.objects.filter(**kwargs)
+        incidents = Incident.objects.filter(**kwargs)     
         return render(request, "operations/incidents-list.html", {"incidents": incidents, "users": users})
     except Exception as e:
+        print(show_exc(e))
         return HttpResponse(show_exc(e), status=500)
 
 @group_required("admins",)

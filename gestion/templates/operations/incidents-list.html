@@ -12,6 +12,7 @@
     <div class="col-1"></div>
 </div>
 
+
 {% for item in incidents %}
     <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
         <div class="col-2">{{ item.owner.username }}</div>
@@ -21,7 +22,7 @@
         <div class="col-3">{{ item.description }}</div>
         <div class="col-1">{{ item.creation_date|date:"d-m-Y H:i" }}</div>
         <div class="col-1">{{ item.closed_date|date:"d-m-Y H:i" }}</div>
-        {#<div class="col-1">{%if item.closed%}<i class="fas fa-check"></i>{%else%}<i class="fas fa-times"></i>{%endif%}</div>#}
+        
         <div class="col-1">{%if item.closed%}{% trans "Cerrada" %}{%else%}{% trans "Abierta" %}{%endif%}</div>
         <div class="col-1 text-end">
             <a class="btn btn-sm ark" data-url="{%url "operation-incidents-form"%}" data-target-modal="common-modal"

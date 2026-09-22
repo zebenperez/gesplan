@@ -5,7 +5,7 @@ from datetime import datetime
 
 from gesplan.decorators import group_required_pwa
 from gesplan.commons import get_or_none, get_param, show_exc
-from gestion.models import EmployeeTruck, Truck, Facility, Waste, WasteInFacility, Route, FacilityActions, FacilityActionType
+from gestion.models import EmployeeTruck, Truck, Facility, FacilityWasteManager, Waste, WasteInFacility, Route, FacilityActions, FacilityActionType
 from gestion.models import Tray, TrayTracking
 from incidents.models import Incident, IncidentType
 
@@ -46,7 +46,13 @@ def driver_routes(request):
 def driver_routes_source(request):
     #item_list = Facility.objects.filter(description__icontains="Punto")
     #return render(request, "drivers/routes-source.html", {'item_list': item_list})
-    context = {'truck': request.user.employee.truck, "item_list": Facility.getPL(), 'tray_list': Tray.objects.all()}
+    company = request.user.employee.company
+    facility_ids = FacilityWasteManager.objects.filter(manager=company).values('facility_id')
+    context = {
+        'truck': request.user.employee.truck,
+        "item_list": Facility.getPL().filter(pk__in=facility_ids),
+        'tray_list': Tray.objects.all(),
+    }
     return render(request, "drivers/routes-source.html", context)
 
 @group_required_pwa("drivers")
@@ -56,7 +62,11 @@ def driver_routes_waste(request):
     TrayTracking.finishTracking(request.user.employee, source)
     TrayTracking.startTracking(request.user.employee, source, tray)
     #item_list = Waste.objects.all()
-    return render(request, "drivers/routes-waste.html", {'item_list':source.waste_by_filling_degree(), 'source':source, 'tray':tray})
+    return render(request, "drivers/routes-waste.html", {
+        'item_list': source.waste_by_filling_degree(request.user.employee.company),
+        'source': source,
+        'tray': tray,
+    })
 
 @group_required_pwa("drivers")
 def driver_routes_confirm(request):

@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<select class="form-control autosave" id="waste" name="waste" data-model-name="gestion.routeext2"
+    data-obj-id="{{ obj.id }}" data-url="{% url "autosave_field" %}" data-target="div-notification">
+    <option value="">{% trans "-- Seleccione un residuo" %}</option>
+    {% for waste in waste_list %}
+        <option value="{{ waste.id }}" {% if waste == obj.waste %}selected{% endif %}>{{ waste.waste.name }}</option>
+    {% endfor %}
+</select>

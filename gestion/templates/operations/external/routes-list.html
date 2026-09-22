@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n tz %}
 
 
 <div class="row main-th py-3 m-0 mt-4">
@@ -14,7 +14,7 @@
 
 {% for item in routes %}
     <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
-        <div class="col-1">{{ item.ini_date|date:"d-m-Y H:i" }}</div>
+        <div class="col-1">{{ item.ini_date|timezone:"Atlantic/Canary"|date:"d-m-Y H:i" }}</div>
         <div class="col-2">{{ item.driver.truck }}</div>
         <div class="col-1">{{ item.driver.name }}</div>
         <div class="col-2">{{ item.source.description }}</div>
@@ -51,4 +51,3 @@
 
     </div>
 {% endfor %}
-

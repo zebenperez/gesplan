@@ -1,0 +1,47 @@
+{% load i18n tz %}
+
+<div class="row modal-head m-0">
+    <div class="col-11"><i class="fas fa-route white"></i>&nbsp; {% trans 'Ruta externa' %}</div>
+    <div class="col-1"><div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-lg" data-bs-dismiss="modal" title="{% trans "Close" %}"><i class="fas fa-times"></i></button>
+    </div></div>
+</div>
+
+<div id="div-notification"></div>
+
+<div class="row justify-center">
+    <div class="col-4"><div class="greybox-sm p-1">
+        {% trans "Fecha" %}
+        <input type="datetime-local" class="form-control autosave" id="date" name="date"
+            value="{{ obj.date|timezone:"Atlantic/Canary"|date:"Y-m-d\\TH:i" }}" data-model-name="gestion.routeext2"
+            data-obj-id="{{ obj.id }}" data-url="{% url "autosave_field" %}" data-target="div-notification" />
+    </div></div>
+    <div class="col-4"><div class="greybox-sm p-1">
+        {% trans "Peso" %}
+        <input type="number" step="0.01" min="0" class="form-control autosave" id="weight" name="weight" value="{{ obj.weight }}"
+            data-model-name="gestion.routeext2" data-obj-id="{{ obj.id }}" data-url="{% url "autosave_field" %}" data-target="div-notification" />
+    </div></div>
+    <div class="col-4"><div class="greybox-sm p-1">
+        {% trans "Instalación" %}
+        <select class="form-control ark_change" id="facility" name="facility" data-url="{% url "operation-routes-ext2-facility-save" %}"
+            data-obj_id="{{ obj.id }}" data-target="div-waste-form">
+            <option value="">{% trans "-- Seleccione una instalación" %}</option>
+            {% for fac in fac_list %}
+                <option value="{{ fac.id }}" {% if fac == obj.facility %}selected{% endif %}>{{ fac.description }}</option>
+            {% endfor %}
+        </select>
+    </div></div>
+    <div class="col-4"><div class="greybox-sm p-1">
+        {% trans "Residuo" %}
+        <div id="div-waste-form">{% include "operations/external/routes-ext2-form-waste.html" %}</div>
+    </div></div>
+</div>
+
+<div class="d-flex justify-content-end p-2">
+    <button type="button" class="btn btn-primary ark" data-bs-dismiss="modal" data-url="{% url "operation-routes-ext2-list" %}"
+        data-target="div-routes-ext2">{% trans "Guardar" %}</button>
+    &nbsp;&nbsp;
+    <button class="btn btn-danger text-white ark" data-url="{% url "operation-routes-ext2-remove" %}" data-target="div-routes-ext2"
+        data-obj_id="{{ obj.id }}" data-bs-dismiss="modal" title="{% trans 'Borrar' %}"
+        data-confirm="{% trans "Are you sure to remove this element?" %}">{% trans "Eliminar" %}</button>
+</div>

@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
-from datetime import datetime, timedelta
-from pytz import timezone
+from datetime import datetime
+from django.utils import timezone
+from zoneinfo import ZoneInfo
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -64,36 +65,25 @@ def operator_wastes_save(request):
 '''
     CITIZENS
 '''
-def get_offset():
-    # Cambio horario
-    tz = timezone('Atlantic/Canary')
-    return 1 if tz.dst(datetime.now()) != timedelta(0) else 0
-
 @group_required_pwa("operators")
 def operator_citizens(request):
-    # Is summer time in effect?
-
-    now = datetime.now()
-    is_monday = datetime.today().weekday() == 0
-    is_saturday = datetime.today().weekday() == 5
-    start_shift = now.replace(hour=00, minute=1)
-    end_shift = now.replace(hour=13, minute=59)
+    canary_tz = ZoneInfo('Atlantic/Canary')
+    now = timezone.now().astimezone(canary_tz)
+    is_monday = now.weekday() == 0
+    is_saturday = now.weekday() == 5
+    start_shift = now.replace(hour=0, minute=1, second=0, microsecond=0)
+    end_shift = now.replace(hour=13, minute=59, second=59, microsecond=999999)
     if is_monday:
-        end_shift = now.replace(hour=16, minute=29)
+        end_shift = now.replace(hour=16, minute=29, second=59, microsecond=999999)
     elif is_saturday:
-        end_shift = now.replace(hour=14, minute=29)
-    if (now > end_shift):
-        start_shift = start_shift.replace(hour=14, minute=00)
+        end_shift = now.replace(hour=14, minute=29, second=59, microsecond=999999)
+    if now > end_shift:
+        start_shift = start_shift.replace(hour=14, minute=0)
         if is_monday:
-            start_shift=start_shift.replace(hour=16, minute=30)
+            start_shift = start_shift.replace(hour=16, minute=30)
         elif is_saturday:
-            start_shift=start_shift.replace(hour=14, minute=30)
-        end_shift = end_shift.replace(hour=23, minute=59)
-
-    offset = get_offset()
-    end_shift -= timedelta(hours=offset)
-    start_shift -= timedelta(hours=offset)
-    # Fin cambio horario
+            start_shift = start_shift.replace(hour=14, minute=30)
+        end_shift = end_shift.replace(hour=23, minute=59, second=59, microsecond=999999)
 
     fac = request.user.employee.facility
     citizen_list = Citizen.objects.filter(facility=fac, date__gte=start_shift, date__lte=end_shift).order_by('-pk')
@@ -185,6 +175,4 @@ def facility_save(request):
     except Exception as e:
         return (render(request, "error_exception.html", {'exc':show_exc(e)}))
     
-
-
 

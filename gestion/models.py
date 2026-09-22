@@ -210,8 +210,14 @@ class Facility(models.Model):
     def __str__(self):
         return self.description
 
-    def waste_by_filling_degree(self):
-        i_list = self.waste.filter(toRoute=True).order_by("filling_degree", "waste")
+    def waste_by_filling_degree(self, manager=None):
+        filters = {"toRoute": True}
+        if manager is not None:
+            filters["waste_id__in"] = FacilityWasteManager.objects.filter(
+                facility=self,
+                manager=manager,
+            ).values("waste_id")
+        i_list = self.waste.filter(**filters).order_by("filling_degree", "waste")
         item_list = []
         current_waste = ""
         for item in i_list:
@@ -785,6 +791,19 @@ class RouteExt(models.Model):
         ordering=['-date']
 
 
+class RouteExt2(models.Model):
+    date = models.DateTimeField(verbose_name=('Fecha'), null=True, default=tz.now)
+    weight = models.FloatField(default=0, verbose_name=_('Peso'))
+    waste = models.ForeignKey(WasteInFacility, on_delete=models.SET_NULL, verbose_name='Residuo', null=True)
+    facility = models.ForeignKey(Facility, on_delete=models.SET_NULL, verbose_name='Instalación', null=True, related_name="routes_ext2")
+    external_manager = models.ForeignKey(Company, verbose_name=_("Gestor Externo"), on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        verbose_name=_('Ruta Externa 2')
+        verbose_name_plural=_('Rutas Externas 2')
+        ordering=['-date']
+
+
 '''
     Facility Actions
 '''
@@ -899,4 +918,3 @@ class EmployeeContract(models.Model):
     class Meta:
         verbose_name=_('Empleado Material')
         verbose_name_plural=_('Empleados Materiales')
-

@@ -9,7 +9,7 @@ from gesplan.commons import get_float, get_or_none, get_param, get_session, set_
 from django.contrib.auth.models import User
 from incidents.models import Incident
 from .models import Facility, FacilityWasteManager, FacilityActions
-from .models import Route, RouteExt, Waste, WasteInFacility, Company, Employee, Truck, Tray
+from .models import Route, RouteExt, RouteExt2, Waste, WasteInFacility, Company, Employee, Truck, Tray
 from .views import get_facilities
 
 
@@ -273,8 +273,55 @@ def get_wastes_in_facility(facility, comp):
 @group_required("external",)
 def index_external(request):
     items = RouteExt.objects.filter(external_manager=request.user.employee.company)
+    routes_ext2 = RouteExt2.objects.filter(external_manager=request.user.employee.company)
     routes = Route.objects.filter(driver__company=request.user.employee.company)
-    return render(request, "operations/external/index.html", {"routes_ext": items, 'routes': routes})
+    return render(request, "operations/external/index.html", {
+        "routes_ext": items,
+        "routes_ext2": routes_ext2,
+        'routes': routes,
+    })
+
+@group_required("external",)
+def routes_ext2_list(request):
+    items = RouteExt2.objects.filter(external_manager=request.user.employee.company)
+    return render(request, "operations/external/routes-ext2-list.html", {"items": items})
+
+@group_required("external",)
+def routes_ext2_form(request):
+    comp = request.user.employee.company
+    obj_id = get_param(request.GET, "obj_id")
+    obj = RouteExt2.objects.filter(pk=obj_id, external_manager=comp).first() if obj_id else None
+    if obj is None:
+        obj = RouteExt2.objects.create(external_manager=comp)
+    fac_list = Facility.objects.filter(company=comp)
+    waste_list = get_wastes_in_facility(obj.facility, comp) if obj.facility else []
+    return render(request, "operations/external/routes-ext2-form.html", {
+        'obj': obj,
+        'fac_list': fac_list,
+        'waste_list': waste_list,
+    })
+
+@group_required("external",)
+def routes_ext2_facility_save(request):
+    comp = request.user.employee.company
+    obj = RouteExt2.objects.filter(pk=get_param(request.GET, "obj_id"), external_manager=comp).first()
+    fac = Facility.objects.filter(pk=get_param(request.GET, "value"), company=comp).first()
+    if obj is not None and fac is not None:
+        obj.facility = fac
+        obj.waste = None
+        obj.save()
+        waste_list = get_wastes_in_facility(fac, comp)
+    else:
+        waste_list = []
+    return render(request, "operations/external/routes-ext2-form-waste.html", {'obj': obj, 'waste_list': waste_list})
+
+@group_required("external",)
+def routes_ext2_remove(request):
+    comp = request.user.employee.company
+    obj = RouteExt2.objects.filter(pk=get_param(request.GET, "obj_id"), external_manager=comp).first()
+    if obj is not None:
+        obj.delete()
+    return routes_ext2_list(request)
 
 @group_required("external",)
 def routes_external_list(request):

@@ -107,6 +107,10 @@ urlpatterns = [
     path('operation/routes-external/form', operation_views.routes_external_form, name='operation-routes-external-form'),
     path('operation/routes-external/facility-save', operation_views.routes_external_facility_save, name='operation-routes-facility-save'),
     path('operation/routes-external/remove', operation_views.routes_external_remove, name='operation-routes-external-remove'),
+    path('operation/routes-ext2/list', operation_views.routes_ext2_list, name='operation-routes-ext2-list'),
+    path('operation/routes-ext2/form', operation_views.routes_ext2_form, name='operation-routes-ext2-form'),
+    path('operation/routes-ext2/facility-save', operation_views.routes_ext2_facility_save, name='operation-routes-ext2-facility-save'),
+    path('operation/routes-ext2/remove', operation_views.routes_ext2_remove, name='operation-routes-ext2-remove'),
     path('operation/facility-external', operation_views.facility_external, name='operation-facility-external'),
     path('operation/facility-waste-external', operation_views.facility_waste_external, name='operation-facility-waste-external'),
 
@@ -126,4 +130,3 @@ urlpatterns = [
     path('autosave_field/', auto_views.autosave_field, name='autosave_field'),
     path('autoremove_obj/', auto_views.autoremove_obj, name='autoremove_obj'),
 ]
-

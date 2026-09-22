@@ -6,6 +6,8 @@ def route_to_json(obj):
         #result["ref"] = "3500000514{}{}".format(obj.ini_date.year, str(obj.pk).zfill(7))
         result["ref"] = obj.ref
         result["ini_date"] = "{}".format(obj.ini_date.strftime("%d-%m-%Y %H:%M"))
+        result["end_date"] = "{}".format(obj.end_date.strftime("%d-%m-%Y %H:%M"))
+        result["res_amount"] = "{}".format(obj.weight)
         result["ot_nima"] = "{}".format(obj.source.nima)
         result["ot_address"] = "{}".format(obj.source.address)
         result["ot_town"] = "{}".format(obj.source.town)
@@ -31,12 +33,11 @@ def route_to_json(obj):
             result["cm_province"] = "{}".format(obj.source.company.province)
             result["cm_phone"] = "{}".format(obj.source.company.phone)
             result["cm_email"] = "{}".format(obj.source.company.email)
-        result["res_ler"] = "{}".format(obj.waste.ler)
-        result["res_desc"] = "{}".format(obj.waste.description)
-        result["res_treatment_code"] = "{}".format(obj.waste.treatment.code)
-        result["res_treatment_desc"] = "{}".format(obj.waste.treatment.description)
+        result["res_ler"] = "{}".format(obj.waste.waste.ler)
+        result["res_desc"] = "{}".format(obj.waste.waste.description)
+        result["res_treatment_code"] = "{}".format(obj.waste.waste.treatment.code)
+        result["res_treatment_desc"] = "{}".format(obj.waste.waste.treatment.description)
         result["res_op_code"] = "{}".format("")
-        result["res_amount"] = "{}".format(obj.weight)
         result["trans_plate"] = "{}".format(obj.truck.number_plate)
         result["trans_nif"] = "{}".format(obj.truck.company.nif)
         result["trans_name"] = "{}".format(obj.truck.company.name)
@@ -51,5 +52,3 @@ def route_to_json(obj):
     except Exception as e:
         print ("[PointRoute toJSON] %s"%(str(e)))
     return(result)
-
-

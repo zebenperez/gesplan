@@ -7,7 +7,7 @@ import django.utils.timezone as tz
 
 from gesplan.decorators import group_required
 from gesplan.commons import get_int, get_float, get_or_none, get_param, get_session, set_session, show_exc, user_in_group
-from .models import Company, Facility, Truck, Employee, EmployeeType, Route, Item, EmployeeItem
+from .models import Company, Facility, Truck, TruckType, Employee, EmployeeType, Route, Item, EmployeeItem
 from .models import EmployeeContract, ContractType, AgreementType, FacilityItem, WasteInFacility
 from .models import FacilityManteinance, FacilityManteinanceConcept, FacilityManteinanceStatus, FacilityManteinanceImage
 from .models import TruckManteinance, TruckManteinanceConcept, TruckManteinanceStatus, TruckManteinanceImage, Tray
@@ -239,7 +239,12 @@ def trucks_form(request):
     obj = get_or_none(Truck, obj_id)
     if obj == None:
         obj = Truck.objects.create()
-    return render(request, "trucks/trucks-form.html", {'obj': obj, 'facilities': Facility.getPL()})
+    return render(request, "trucks/trucks-form.html", {
+        'obj': obj,
+        'facilities': Facility.getPL(),
+        'company_list': Company.objects.all().order_by('name'),
+        'truck_type_list': TruckType.objects.all().order_by('brand', 'model', 'year'),
+    })
 
 @group_required("admins",)
 def trucks_remove(request):

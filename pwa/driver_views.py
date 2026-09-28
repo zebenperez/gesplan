@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from datetime import datetime
 
 from gesplan.decorators import group_required_pwa
-from gesplan.commons import get_or_none, get_param, show_exc
+from gesplan.commons import get_or_none, get_param, show_exc, user_in_group
 from gestion.models import EmployeeTruck, Truck, Facility, FacilityWasteManager, Waste, WasteInFacility, Route, FacilityActions, FacilityActionType
 from gestion.models import Tray, TrayTracking
 from incidents.models import Incident, IncidentType
@@ -113,9 +113,19 @@ def driver_routes_finish(request):
     #return render(request, "drivers/routes-finish.html", {'route': route})
     #return render(request, "drivers/routes-finish.html", {'route': route, 'target': target, 'weight': weight})
 
-@group_required_pwa("drivers")
+@group_required_pwa("drivers", "external")
 def driver_routes_dir(request, route_id):
-    route = get_or_none(Route, route_id)
+    if user_in_group(request.user, "external"):
+        route = Route.objects.filter(
+            pk=route_id,
+            driver__company=request.user.employee.company,
+        ).first()
+    else:
+        route = get_or_none(Route, route_id)
+
+    if route is None:
+        return render(request, "error_exception.html", {'exc': 'Route not found!'})
+
     return render(request, "drivers/driver-doc.html", {'route': route, 'datas': route.jsonDoc()})
 
 

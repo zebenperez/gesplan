@@ -14,6 +14,14 @@ from gestion.route_lib import route_to_json
 from gestion.email_lib import send_warning_level_email
 
 
+EMPLOYEE_ROLE_GROUPS = {
+    "driver": "drivers",
+    "driver_mpl": "drivers_mpl",
+    "operator": "operators",
+    "external": "external",
+}
+
+
 class Config(models.Model):
     key = models.CharField(max_length=200, verbose_name = _('clave'))
     value = models.TextField(verbose_name="valor")
@@ -584,13 +592,18 @@ class Employee(models.Model):
             self.user.first_name = self.name
             self.user.last_name = self.surname
             self.save()
-            group = Group.objects.get(name='operators')
-            group.user_set.add(self.user)
         else:
             self.user.username = self.email
             self.user.first_name = self.name
             self.user.last_name = self.surname
-            self.user.save()
+
+        self.user.save()
+        self.user.groups.remove(*Group.objects.filter(name__in=EMPLOYEE_ROLE_GROUPS.values()))
+
+        group_name = EMPLOYEE_ROLE_GROUPS.get(self.rol.code) if self.rol else None
+        if group_name:
+            group, _ = Group.objects.get_or_create(name=group_name)
+            self.user.groups.add(group)
 
     @staticmethod
     def getOperators():

@@ -32,11 +32,23 @@ def set_initial_dates(request):
         set_session(request, "s_citizen_idate", now.strftime("%Y-%m-%d"))
     if edate == "":
         set_session(request, "s_citizen_edate", now.strftime("%Y-%m-%d"))
+
+def get_citizen_session_date(request, key):
+    value = get_session(request, key)
+    if not value:
+        return datetime.now()
+    if isinstance(value, datetime):
+        return value
+    return datetime.fromisoformat(value)
  
 def get_stats(request):
     dic = {}
-    idate = datetime.strptime("{} 00:00:00".format(get_session(request, "s_citizen_idate")), "%Y-%m-%d %H:%M:%S")
-    edate = datetime.strptime("{} 23:59:59".format(get_session(request, "s_citizen_edate")), "%Y-%m-%d %H:%M:%S")
+    idate = get_citizen_session_date(request, "s_citizen_idate").replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    edate = get_citizen_session_date(request, "s_citizen_edate").replace(
+        hour=23, minute=59, second=59, microsecond=999999
+    )
     current = idate
     while current <= edate:
         #print(current.strftime("%Y-%m"))  # o actual.month, actual.year
@@ -46,8 +58,12 @@ def get_stats(request):
 
 def get_citizens(request):
     plate = get_session(request, "s_citizen_plate")
-    idate = datetime.strptime("{} 00:00:00".format(get_session(request, "s_citizen_idate")), "%Y-%m-%d %H:%M:%S")
-    edate = datetime.strptime("{} 23:59:59".format(get_session(request, "s_citizen_edate")), "%Y-%m-%d %H:%M:%S")
+    idate = get_citizen_session_date(request, "s_citizen_idate").replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    edate = get_citizen_session_date(request, "s_citizen_edate").replace(
+        hour=23, minute=59, second=59, microsecond=999999
+    )
     waste = get_session(request, "s_citizen_waste")
     fac = get_session(request, "s_citizen_facility")
     kwargs = {"date__range": (idate, edate)}

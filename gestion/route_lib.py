@@ -35,8 +35,9 @@ def route_to_json(obj):
             result["cm_email"] = "{}".format(obj.source.company.email)
         result["res_ler"] = "{}".format(obj.waste.waste.ler)
         result["res_desc"] = "{}".format(obj.waste.waste.description)
-        result["res_treatment_code"] = "{}".format(obj.waste.waste.treatment.code)
-        result["res_treatment_desc"] = "{}".format(obj.waste.waste.treatment.description)
+        treatment = obj.waste.waste.treatment
+        result["res_treatment_code"] = "{}".format(treatment.code) if treatment else ""
+        result["res_treatment_desc"] = "{}".format(treatment.description) if treatment else ""
         result["res_op_code"] = "{}".format("")
         result["trans_plate"] = "{}".format(obj.truck.number_plate)
         result["trans_nif"] = "{}".format(obj.truck.company.nif)

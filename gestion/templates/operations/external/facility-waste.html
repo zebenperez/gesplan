@@ -11,8 +11,9 @@
 <div class="content mt-2">
     <div id="fac-list" class="ml-list">
         <div class="row main-th py-3 m-0">
-            <div class="col-8"> {% trans 'Nombre' %} </div>
+            <div class="col-5"> {% trans 'Nombre' %} </div>
             <div class="col-2"> {% trans 'Llenado' %} </div>
+            <div class="col-3"> {% trans 'Última actualización' %} </div>
             <div class="col-2"></div>
         </div>
 
@@ -24,8 +25,9 @@
             {% else %}
                 <div class="row list-item pt-2 pb-2 m-0" id="row_{{item.id}}">
             {% endif %}
-                <div class="col-8">{{ item.waste.name }}</div>
+                <div class="col-5">{{ item.waste.name }}</div>
                 <div class="col-2">{{ item.filling_degree|default:"" }}</div>
+                <div class="col-3">{{ item.last_modification|date:"d/m/Y H:i" }}</div>
                 <div class="col-2 text-right"> </div>
             </div>
         {% endfor %}

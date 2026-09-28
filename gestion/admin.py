@@ -15,7 +15,7 @@ class ContractTypeAdmin(admin.ModelAdmin):
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('name', 'rol', 'company')
     list_filter = ('rol',)
-    search_fields = ['name', 'company']
+    search_fields = ('name', 'surname', 'nif', 'company__name', 'company__nif')
 
 class EmployeeAccessLogAdmin(admin.ModelAdmin):
     list_display = ('employee', 'date', 'location', 'finish')
@@ -104,4 +104,3 @@ admin.site.register(UnitType)
 admin.site.register(Waste, WasteAdmin)
 #admin.site.register(Priority, PriorityAdmin)
 admin.site.register(WasteInFacility, WasteInFacilityAdmin)
-

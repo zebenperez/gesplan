@@ -389,7 +389,12 @@ def employees_form(request):
     obj = get_or_none(Employee, obj_id)
     #if obj == None:
     #    obj = Employee.objects.create()
-    context = {'obj': obj, 'rol_list': EmployeeType.objects.all(), 'fac_list': Facility.getPL()}
+    context = {
+        'obj': obj,
+        'rol_list': EmployeeType.objects.all(),
+        'company_list': Company.objects.all(),
+        'fac_list': Facility.getPL(),
+    }
     return render(request, "employees/employees-form.html", context)
 
 @group_required("admins",)
@@ -401,6 +406,7 @@ def employees_save(request):
     obj.name = get_param(request.POST, "name")
     obj.surname = get_param(request.POST, "surname")
     obj.rol = get_or_none(EmployeeType, get_param(request.POST, "rol"))
+    obj.company = get_or_none(Company, get_param(request.POST, "company"))
     obj.facility = get_or_none(Facility, get_param(request.POST, "facility"))
     obj.active = True if get_param(request.POST, "active") != "" else False
     obj.code = get_param(request.POST, "code")
@@ -607,4 +613,3 @@ def email_test(request):
     ec = EmailConfig(email_to, Config.get_value("EMAIL_TEST_SUBJECT"), "", Config.get_value("EMAIL_TEST_HTML"))
     send_email(ec)
     return HttpResponse("Ok!")
-

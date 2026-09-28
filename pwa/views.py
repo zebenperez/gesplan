@@ -88,12 +88,16 @@ def pin_logout_confirm(request):
 '''
 @group_required_pwa("drivers", "drivers_mpl")
 def select_truck(request):
-    return render(request, "pwa-select-truck.html", {'truck_list': Truck.objects.all()})
+    truck_list = Truck.objects.filter(company=request.user.employee.company)
+    return render(request, "pwa-select-truck.html", {'truck_list': truck_list})
 
 @group_required_pwa("drivers", "drivers_mpl")
 def save_truck(request):
     try:
-        truck = get_or_none(Truck, get_param(request.POST, "truck"))
+        truck = Truck.objects.filter(
+            pk=get_param(request.POST, "truck"),
+            company=request.user.employee.company,
+        ).first()
         if truck != None:
             #Quitamos el camión a otro empleado si lo tiene asignado
             et_aux = EmployeeTruck.objects.filter(truck=truck).first()
